@@ -3,6 +3,9 @@ package hoshino
 import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
+import dev.kord.gateway.Intent
+import dev.kord.gateway.PrivilegedIntent
+import hoshino.commands.AvatarCommand
 import hoshino.commands.CoinflipCommand
 import hoshino.commands.HelloCommand
 import hoshino.handlers.CommandHandler
@@ -20,6 +23,8 @@ suspend fun main() {
     val commandHandler = CommandHandler()
     commandHandler.registerCommand("hello", HelloCommand())
     commandHandler.registerCommand("coinflip", CoinflipCommand())
+    commandHandler.registerCommand("avatar", AvatarCommand())
+
     // Đăng ký các lệnh khác với commandHandler
 
     client.on<MessageCreateEvent> {
@@ -27,6 +32,11 @@ suspend fun main() {
         commandHandler.handleCommand(this)
     }
 
-    client.login()
+    client.login{
+        presence { playing("I am Ai Hoshino") }
+
+        @OptIn(PrivilegedIntent::class)
+        intents += Intent.MessageContent
+    }
 }
 

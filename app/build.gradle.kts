@@ -34,7 +34,8 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-    implementation("ch.qos.logback:logback-classic:1.2.9")
+    testImplementation("ch.qos.logback:logback-classic:1.4.7")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
