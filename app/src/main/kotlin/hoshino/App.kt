@@ -38,7 +38,14 @@ suspend fun main() {
     // Create an instance of the SlashCommandHandler
     val slashCommandHandler = SlashCommandHandler(client, applicationId)
     val helloCommand = HelloCommand()
+    val coinflipCommand = CoinflipCommand()
+    val avatarCommand = AvatarCommand()
+    val helpCommand = HelpCommand(commandHandler.commands)
     slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
+    slashCommandHandler.registerCommand("coinflip", "Flip a coin", coinflipCommand::execute)
+    slashCommandHandler.registerCommand("avatar", "Get Avatar", avatarCommand::execute)
+    slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
+
     slashCommandHandler.listen()
 
     // Đăng ký các lệnh khác với commandHandler
