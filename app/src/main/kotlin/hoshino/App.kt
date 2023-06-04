@@ -37,19 +37,8 @@ suspend fun main() {
 
     // Create an instance of the SlashCommandHandler
     val slashCommandHandler = SlashCommandHandler(client, applicationId)
-    slashCommandHandler.registerCommand("mycommand", "My custom slash command") { interaction ->
-        // Cast the interaction to an ApplicationCommandInteraction
-        val commandInteraction = interaction as ApplicationCommandInteraction
-
-        // Create a response
-        val response = "Hello from my custom slash command!"
-
-        // Respond to the interaction
-        commandInteraction.respondPublic {
-            content = response
-        }
-    }
-
+    val helloCommand = HelloCommand()
+    slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
     slashCommandHandler.listen()
 
     // Đăng ký các lệnh khác với commandHandler
