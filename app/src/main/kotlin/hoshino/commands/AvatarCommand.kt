@@ -5,9 +5,10 @@ import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kord.rest.Image
 import kotlinx.coroutines.flow.firstOrNull
 
-class AvatarCommand : Command {
+class AvatarCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
         val mentionedUser = message.getUserMention()?.asUser() ?: message.author?.asUser()
@@ -33,4 +34,7 @@ class AvatarCommand : Command {
     private suspend fun Message.getUserMention(): User? {
         return this.mentionedUsers.firstOrNull()
     }
+
+    override val description: String
+        get() = "Lấy Avatar"
 }

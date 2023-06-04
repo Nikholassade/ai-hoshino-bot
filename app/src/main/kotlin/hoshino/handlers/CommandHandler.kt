@@ -4,7 +4,7 @@ import dev.kord.core.event.message.MessageCreateEvent
 import hoshino.commands.Command
 
 class CommandHandler {
-    private val commands = mutableMapOf<String, Command>()
+     val commands = mutableMapOf<String, Command>()
 
     fun registerCommand(commandName: String, command: Command) {
         commands[commandName] = command
