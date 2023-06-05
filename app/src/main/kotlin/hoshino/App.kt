@@ -1,5 +1,7 @@
 package hoshino
 
+import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
@@ -9,10 +11,7 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import hoshino.commands.AvatarCommand
-import hoshino.commands.CoinflipCommand
-import hoshino.commands.HelloCommand
-import hoshino.commands.HelpCommand
+import hoshino.commands.*
 import hoshino.handlers.CommandHandler
 import hoshino.handlers.SlashCommandHandler
 import io.github.cdimascio.dotenv.dotenv
@@ -30,10 +29,15 @@ suspend fun main() {
     logger.info("Ai Hoshino started")
 
     val commandHandler = CommandHandler()
+    val playerManager = DefaultAudioPlayerManager()
+    playerManager.registerSourceManager(YoutubeAudioSourceManager())
+    // Create an instance of the PlayCommand
+    val playCommand = PlayCommand(playerManager)
     commandHandler.registerCommand("hello", HelloCommand())
     commandHandler.registerCommand("coinflip", CoinflipCommand())
     commandHandler.registerCommand("avatar", AvatarCommand())
     commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
+    commandHandler.registerCommand("play", playCommand)
 
     // Create an instance of the SlashCommandHandler
     val slashCommandHandler = SlashCommandHandler(client, applicationId)
@@ -47,6 +51,8 @@ suspend fun main() {
     slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
 
     slashCommandHandler.listen()
+
+
 
     // Đăng ký các lệnh khác với commandHandler
 

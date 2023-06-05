@@ -17,6 +17,11 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
+    // Add the 'https://m2.dv8tion.net/releases' repository
+    maven {
+        url = uri("https://m2.dv8tion.net/releases")
+    }
 }
 
 dependencies {
@@ -35,6 +40,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation("ch.qos.logback:logback-classic:1.4.7")
+
+    implementation("com.sedmelluq:lavaplayer:1.3.77")
+
 
 }
 
