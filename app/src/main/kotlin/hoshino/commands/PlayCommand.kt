@@ -1,75 +1,73 @@
 package hoshino.commands
-
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.kord.common.entity.Snowflake
-import dev.kord.core.behavior.channel.createMessage
-import dev.kord.core.entity.Guild
+import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
-import hoshino.commands.Command
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import dev.schlaubi.lavakord.MutableLavaKordOptions
+import dev.schlaubi.lavakord.audio.TrackStartEvent
+import dev.schlaubi.lavakord.kord.getLink
+import dev.schlaubi.lavakord.rest.loadItem
+import hoshino.commands.music.KordLavaKord
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import dev.schlaubi.lavakord.rest.models.TrackResponse.LoadType
 
-class PlayCommand(private val playerManager: AudioPlayerManager) : Command {
-    @OptIn(DelicateCoroutinesApi::class)
+
+class PlayCommand(val kord: Kord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {
+        // Get the message and its content
         val message = event.message
-        val args = message.content.split(" ").drop(1)
-        if (args.isEmpty()) {
-            message.channel.createMessage("Please provide the name or URL of the song you want to play.")
-            return
-        }
+        val content = message.content
 
+        // Parse the command arguments
+        val args = content.split(" ").drop(1)
         val query = args.joinToString(" ")
-        val guild = message.getGuild()
-        if (guild != null) {
-            val musicManager = getMusicManager(guild)
-            val trackScheduler = musicManager.trackScheduler
 
-            playerManager.loadItem(query, object : AudioLoadResultHandler {
-                override fun trackLoaded(track: AudioTrack) {
-                    trackScheduler.queue(track)
-                    GlobalScope.launch {
-                        message.channel.createMessage("Added `${track.info.title}` to the queue.")
-                    }
-                }
+        // Get the guild and voice channel
+        val guild = event.getGuildOrNull()
+        val voiceChannel = event.message.getAuthorAsMemberOrNull()?.getVoiceStateOrNull()?.getChannelOrNull()
+        if (guild != null && voiceChannel != null) {
+            // Create an instance of LavaKord
+            val options = MutableLavaKordOptions()
+            val lavaKord = KordLavaKord(kord, kord.selfId.value, options)
+            lavaKord.addNode(
+                serverUri = "wss://lavalink-replit.nthduc.repl.co:443",
+                password = "021220"
+            )
 
-                override fun playlistLoaded(playlist: AudioPlaylist) {
-                    for (track in playlist.tracks) {
-                        trackScheduler.queue(track)
-                    }
-                    GlobalScope.launch {
-                        message.channel.createMessage("Added `${playlist.tracks.size}` tracks to the queue.")
-                    }
-                }
+            // Get the link for the guild
+            val link = guild.getLink(lavaKord)
 
-                override fun noMatches() {
-                    GlobalScope.launch {
-                        message.channel.createMessage("No matches found for `$query`.")
-                    }
-                }
+            // Connect to the voice channel
+            link.connectAudio(voiceChannel.id.value)
 
-                override fun loadFailed(exception: FriendlyException) {
-                    GlobalScope.launch {
-                        message.channel.createMessage("Failed to load `$query`: ${exception.message}")
-                    }
+            // Load and play the track
+            var result = link.loadItem(query)
+            var attempts = 0
+            while (result.loadType == LoadType.NO_MATCHES && attempts < 5) {
+                delay(1000)
+                result = link.loadItem(query)
+                attempts++
+            }
+            if (result.tracks.isNotEmpty()) {
+                val track = result.tracks.first()
+                link.player.playTrack(track)
+            } else {
+                message.channel.createMessage("No tracks were found for the query `$query`.")
+            }
+
+            // Listen for the TrackStartEvent
+            link.node.events.filterIsInstance<TrackStartEvent>().onEach { trackStartEvent ->
+                kord.launch {
+                    message.channel.createMessage("Now playing `${trackStartEvent.getTrack().title}`")
                 }
-            })
+            }.launchIn(kord)
+        } else {
+            message.channel.createMessage("You must join a voice channel first.")
         }
     }
 
-    private fun getMusicManager(guild: Guild): MusicManager {
-        return musicManagers.getOrPut(guild.id) {
-            // Create a new MusicManager for the guild
-            MusicManager(playerManager)
-        }
-    }
     override val description: String
-        get() = "Plays a song from YouTube"
+        get() = "Plays a song"
 }
