@@ -43,6 +43,8 @@ dependencies {
 
     implementation("com.sedmelluq:lavaplayer:1.3.77")
 
+    implementation("dev.schlaubi.lavakord:kord:4.1.0")
+
 
 }
 

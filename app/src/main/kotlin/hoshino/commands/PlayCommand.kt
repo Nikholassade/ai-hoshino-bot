@@ -1,75 +1,48 @@
 package hoshino.commands
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager
-import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
-import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import dev.kord.common.entity.Snowflake
-import dev.kord.core.behavior.channel.createMessage
-import dev.kord.core.entity.Guild
 import dev.kord.core.event.message.MessageCreateEvent
-import hoshino.commands.Command
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import dev.schlaubi.lavakord.LavaKord
+import dev.schlaubi.lavakord.audio.Link
+import dev.schlaubi.lavakord.rest.loadItem
+import dev.schlaubi.lavakord.rest.models.TrackResponse
 
-class PlayCommand(private val playerManager: AudioPlayerManager) : Command {
-    @OptIn(DelicateCoroutinesApi::class)
+class PlayCommand(private val lavalink: LavaKord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {
-        val message = event.message
-        val args = message.content.split(" ").drop(1)
-        if (args.isEmpty()) {
-            message.channel.createMessage("Please provide the name or URL of the song you want to play.")
-            return
+        val args = event.message.content.split(" ")
+        val query = args.drop(1).joinToString(" ")
+        val search = if (query.startsWith("http")) {
+            query
+        } else {
+            "ytsearch:$query"
         }
 
-        val query = args.joinToString(" ")
-        val guild = message.getGuild()
-        if (guild != null) {
-            val musicManager = getMusicManager(guild)
-            val trackScheduler = musicManager.trackScheduler
+        val link = lavalink.getLink(event.guildId?.toString() ?: return)
+        if (link.state != Link.State.CONNECTED) {
+            val voiceState = event.member?.getVoiceState()
+            val channelId = voiceState?.channelId
+            if (channelId == null) {
+                event.message.channel.createMessage("Please connect to a voice channel")
+                return
+            }
+            link.connectAudio(channelId.value)
+        }
 
-            playerManager.loadItem(query, object : AudioLoadResultHandler {
-                override fun trackLoaded(track: AudioTrack) {
-                    trackScheduler.queue(track)
-                    GlobalScope.launch {
-                        message.channel.createMessage("Added `${track.info.title}` to the queue.")
-                    }
-                }
+        val item = link.loadItem(search)
 
-                override fun playlistLoaded(playlist: AudioPlaylist) {
-                    for (track in playlist.tracks) {
-                        trackScheduler.queue(track)
-                    }
-                    GlobalScope.launch {
-                        message.channel.createMessage("Added `${playlist.tracks.size}` tracks to the queue.")
-                    }
-                }
+        when (item.loadType) {
+            TrackResponse.LoadType.TRACK_LOADED,
+            TrackResponse.LoadType.PLAYLIST_LOADED,
+            TrackResponse.LoadType.SEARCH_RESULT -> link.player.playTrack(
+                item.tracks.first()
+            )
 
-                override fun noMatches() {
-                    GlobalScope.launch {
-                        message.channel.createMessage("No matches found for `$query`.")
-                    }
-                }
-
-                override fun loadFailed(exception: FriendlyException) {
-                    GlobalScope.launch {
-                        message.channel.createMessage("Failed to load `$query`: ${exception.message}")
-                    }
-                }
-            })
+            TrackResponse.LoadType.NO_MATCHES -> event.message.channel.createMessage("No matches")
+            TrackResponse.LoadType.LOAD_FAILED -> event.message.channel.createMessage(
+                item.exception?.message ?: "Exception"
+            )
         }
     }
 
-    private fun getMusicManager(guild: Guild): MusicManager {
-        return musicManagers.getOrPut(guild.id) {
-            // Create a new MusicManager for the guild
-            MusicManager(playerManager)
-        }
-    }
     override val description: String
-        get() = "Plays a song from YouTube"
+        get() = "Play a song"
 }
