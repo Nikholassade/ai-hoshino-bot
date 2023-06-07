@@ -1,4 +1,4 @@
-package hoshino.commands.music
+package hoshino.kord
 
 import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Permissions
