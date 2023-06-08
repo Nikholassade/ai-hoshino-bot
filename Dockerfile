@@ -1,24 +1,20 @@
-FROM openjdk:17-jdk-slim
+# Sử dụng image base có chứa JDK 17
+FROM adoptopenjdk/openjdk17:alpine-slim
 
-# Cài đặt các gói cần thiết
-RUN apt-get update && \
-    apt-get install -y curl zip unzip
-
-# Cài đặt SDKMAN
-RUN curl -s "https://get.sdkman.io" | bash
-
-# Chạy lệnh khởi động SDKMAN
-RUN /bin/bash -c "source $HOME/.sdkman/bin/sdkman-init.sh"
-
-# Cài đặt Gradle phiên bản 8.1.1
-RUN /bin/bash -c "sdk install gradle 8.1.1"
-
+# Thiết lập thư mục làm việc
 WORKDIR /app
 
-# Xây dựng ứng dụng bằng Gradle
-RUN /bin/bash -c "gradle build"
+# Sao chép mã nguồn của ứng dụng vào Docker image
+COPY . .
 
-# Sao chép tệp .jar của ứng dụng vào container Docker
-COPY build/libs/*.jar /app/bot.jar
+# Build ứng dụng bằng Gradle
+RUN ./gradlew build
 
-CMD ["java", "-jar", "/app/bot.jar"]
+# Sao chép tệp JAR của ứng dụng vào image
+COPY ./app/build/libs/app.jar .
+
+# Thiết lập các tham số mặc định cho JVM
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
+
+# Thiết lập lệnh mặc định khi chạy container
+CMD ["java", "-jar", "app.jar"]
