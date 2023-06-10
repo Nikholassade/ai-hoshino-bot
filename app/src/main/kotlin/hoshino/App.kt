@@ -37,7 +37,7 @@ suspend fun main() {
     commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
     commandHandler.registerCommand("play", PlayCommand(lavalink,client))
     commandHandler.registerCommand("stop", StopCommand(lavalink))
-
+    commandHandler.registerCommand("pause", PauseCommand(lavalink))
 
     // Create an instance of the SlashCommandHandler
     val slashCommandHandler = SlashCommandHandler(client, applicationId)

@@ -11,6 +11,8 @@ import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.exception.EntityNotFoundException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {
@@ -35,6 +37,13 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                 return
             }
             link.connectAudio(channelId.value)
+            // Launch a new coroutine to automatically disconnect after 60 seconds of inactivity
+            kord.launch {
+                delay(60000)
+                if (link.state == Link.State.CONNECTED && link.player.playingTrack == null) {
+                    link.destroy()
+                }
+            }
         }
 
         val item = link.loadItem(search)
