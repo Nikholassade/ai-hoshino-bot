@@ -9,6 +9,10 @@ import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.lavakord.kord.lavakord
 import hoshino.commands.*
+import hoshino.commands.music.PauseCommand
+import hoshino.commands.music.PlayCommand
+import hoshino.commands.music.ResumeCommand
+import hoshino.commands.music.StopCommand
 import hoshino.handlers.CommandHandler
 import hoshino.handlers.SlashCommandHandler
 import io.github.cdimascio.dotenv.dotenv

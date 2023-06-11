@@ -1,4 +1,4 @@
-package hoshino.commands
+package hoshino.commands.music
 
 import dev.kord.core.Kord
 import dev.kord.core.behavior.interaction.respondPublic
@@ -11,6 +11,7 @@ import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.models.TrackResponse
 import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.exception.EntityNotFoundException
+import hoshino.commands.Command
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
