@@ -1,20 +1,23 @@
-# Sử dụng image base có chứa JDK 17
-FROM openjdk:17-alpine
+# Use an official OpenJDK image as the base image
+FROM openjdk:17-jdk-slim
 
-# Thiết lập thư mục làm việc
+# Set the working directory to /app
 WORKDIR /app
 
-# Sao chép mã nguồn của ứng dụng vào Docker image
-COPY . .
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Build ứng dụng bằng Gradle
-RUN ./gradlew build
+# Install Gradle
+RUN wget https://services.gradle.org/distributions/gradle-8.1.1-bin.zip -P /tmp \
+    && unzip -d /opt/gradle /tmp/gradle-*.zip \
+    && ln -s /opt/gradle/gradle-8.1.1/bin/gradle /usr/bin/gradle \
+    && rm /tmp/gradle-*.zip
 
-# Sao chép tệp JAR của ứng dụng vào image
-COPY ./app/build/libs/app.jar .
+# Build the project using Gradle
+RUN gradle build
 
-# Thiết lập các tham số mặc định cho JVM
-ENV JAVA_OPTS="-Xmx512m -Xms256m"
+# Make port 8080 available to the world outside this container
+EXPOSE 8080
 
-# Thiết lập lệnh mặc định khi chạy container
-CMD ["java", "-jar", "app.jar"]
+# Run the app when the container launches
+CMD ["java", "-jar", "build/libs/app.jar"]
