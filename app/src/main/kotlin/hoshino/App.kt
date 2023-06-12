@@ -8,7 +8,10 @@ import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.schlaubi.lavakord.kord.lavakord
-import hoshino.commands.*
+import hoshino.commands.AvatarCommand
+import hoshino.commands.CoinflipCommand
+import hoshino.commands.HelloCommand
+import hoshino.commands.HelpCommand
 import hoshino.commands.music.*
 import hoshino.handlers.CommandHandler
 import hoshino.handlers.SlashCommandHandler
@@ -41,6 +44,7 @@ suspend fun main() {
     commandHandler.registerCommand("pause", PauseCommand(lavalink))
     commandHandler.registerCommand("resume", ResumeCommand(lavalink))
     commandHandler.registerCommand("leave", LeaveCommand(lavalink))
+    commandHandler.registerCommand("connect", ConnectCommand(lavalink))
 
     // Create an instance of the SlashCommandHandler
     val slashCommandHandler = SlashCommandHandler(client, applicationId)
