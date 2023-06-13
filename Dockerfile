@@ -23,6 +23,9 @@ RUN ./gradlew build --stacktrace
 WORKDIR /run
 RUN cp /app/app/build/libs/hoshino.jar /run/hoshino.jar
 
+# Copy the .env file to the container
+COPY .env.example /app/.env
+
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
