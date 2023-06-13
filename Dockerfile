@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y dos2unix
 # Convert gradlew to Unix format
 RUN dos2unix gradlew
 
+# Add execute permissions to the gradlew file
+RUN chmod +x gradlew
+
 # Build the project using the Gradle wrapper
 RUN ./gradlew build
 
