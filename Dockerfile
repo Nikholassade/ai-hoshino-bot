@@ -7,14 +7,18 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-RUN apt-get update
-RUN apt-get install -y dos2unix
+# Install dos2unix to convert Windows line endings to Unix line endings
+RUN apt-get update && apt-get install -y dos2unix
+
+# Convert gradlew to Unix format
 RUN dos2unix gradlew
 
-RUN bash gradlew fatJar
-WORKDIR /run
-RUN cp /app/build/libs/*.jar /run/hoshino.jar
+# Build the project using the Gradle wrapper
+RUN ./gradlew build
 
+# Copy the built JAR file to /run/hoshino.jar
+WORKDIR /run
+RUN cp /app/app/build/libs/*.jar /run/hoshino.jar
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
