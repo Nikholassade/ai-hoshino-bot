@@ -7,17 +7,17 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install Gradle
-RUN wget https://services.gradle.org/distributions/gradle-8.1.1-bin.zip -P /tmp \
-    && unzip -d /opt/gradle /tmp/gradle-*.zip \
-    && ln -s /opt/gradle/gradle-8.1.1/bin/gradle /usr/bin/gradle \
-    && rm /tmp/gradle-*.zip
+RUN apt-get update
+RUN apt-get install -y dos2unix
+RUN dos2unix gradlew
 
-# Build the project using Gradle
-RUN gradle build
+RUN bash gradlew fatJar
+WORKDIR /run
+RUN cp /app/build/libs/*.jar /run/hoshino.jar
+
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
 # Run the app when the container launches
-CMD ["java", "-jar", "build/libs/app.jar"]
+CMD ["java", "-jar", "/run/hoshino.jar"]
