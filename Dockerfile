@@ -7,9 +7,6 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Copy the .env file into the container at /app
-COPY .env /app
-
 # Install dos2unix to convert Windows line endings to Unix line endings
 RUN apt-get update && apt-get install -y dos2unix
 
