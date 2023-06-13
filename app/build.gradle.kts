@@ -9,6 +9,7 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -60,12 +61,11 @@ application {
     mainClass.set("hoshino.AppKt")
 }
 
-tasks.jar {
-    manifest {
-        attributes["Main-Class"] = "hoshino.AppKt"
-    }
+tasks.shadowJar {
+    archiveBaseName.set("hoshino")
+    archiveClassifier.set("")
+    archiveVersion.set("")
 }
-
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()

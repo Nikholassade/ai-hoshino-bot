@@ -21,7 +21,7 @@ RUN ./gradlew build --stacktrace
 
 # Copy the built JAR file to /run/hoshino.jar
 WORKDIR /run
-RUN cp /app/app/build/libs/*.jar /run/hoshino.jar
+RUN cp /app/app/build/libs/hoshino.jar /run/hoshino.jar
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
