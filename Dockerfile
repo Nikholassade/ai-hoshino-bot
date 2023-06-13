@@ -17,7 +17,7 @@ RUN dos2unix gradlew
 RUN chmod +x gradlew
 
 # Build the project using the Gradle wrapper
-RUN ./gradlew build
+RUN ./gradlew build --stacktrace
 
 # Copy the built JAR file to /run/hoshino.jar
 WORKDIR /run
