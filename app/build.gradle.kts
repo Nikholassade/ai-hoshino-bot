@@ -60,6 +60,12 @@ application {
     mainClass.set("hoshino.AppKt")
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "hoshino.AppKt"
+    }
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
