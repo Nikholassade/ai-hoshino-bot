@@ -21,7 +21,8 @@ repositories {
 
     // Add the 'https://m2.dv8tion.net/releases' repository
     maven {
-        url = uri("https://m2.dv8tion.net/releases")
+//        url = uri("https://m2.dv8tion.net/releases")
+        url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
     }
 }
 
@@ -44,9 +45,13 @@ dependencies {
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     implementation("ch.qos.logback:logback-classic:1.4.7")
 
-    implementation("com.sedmelluq:lavaplayer:1.3.77")
-
     implementation("dev.schlaubi.lavakord:kord:4.1.0")
+    // List of artifacts, e.g.:
+    implementation("io.ktor:ktor-server-core-jvm:2.3.1")
+    implementation("io.ktor:ktor-server-netty-jvm:2.3.1")
+    implementation("io.ktor:ktor-server-status-pages-jvm:2.3.1")
+    implementation("io.ktor:ktor-server-default-headers-jvm:2.3.1")
+    implementation("io.ktor:ktor-server-cors:2.3.1")
 
 
 }

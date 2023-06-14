@@ -16,7 +16,14 @@ import hoshino.commands.music.*
 import hoshino.handlers.CommandHandler
 import hoshino.handlers.SlashCommandHandler
 import io.github.cdimascio.dotenv.dotenv
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import org.slf4j.LoggerFactory
+
 
 @OptIn(KordPreview::class)
 suspend fun main() {
@@ -81,6 +88,18 @@ suspend fun main() {
         intents += Intent.DirectMessages
         intents += Intent.GuildWebhooks
 
+    }
+    embeddedServer(Netty, port = 8080, module = Application::configureRouting)
+        .start(wait = true)
+}
+fun Application.configureRouting() {
+    install(CORS) {
+        anyHost()
+    }
+    routing {
+        get("/") {
+            call.respondText("Hello . Welcome Ai Hoshino !")
+        }
     }
 }
 
