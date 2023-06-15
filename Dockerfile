@@ -19,9 +19,6 @@ RUN chmod +x gradlew
 # Build the project using the Gradle wrapper
 RUN ./gradlew build --stacktrace
 
-# Rebuild the project using the Gradle wrapper
-RUN ./gradlew clean build --stacktrace
-
 # Copy the built JAR file to /run/hoshino.jar
 WORKDIR /run
 RUN cp /app/app/build/libs/hoshino.jar /run/hoshino.jar

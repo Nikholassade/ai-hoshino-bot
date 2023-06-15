@@ -73,6 +73,7 @@ tasks.shadowJar {
     archiveBaseName.set("hoshino")
     archiveClassifier.set("")
     archiveVersion.set("")
+    destinationDirectory.set(file("$buildDir/libs"))
 }
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
