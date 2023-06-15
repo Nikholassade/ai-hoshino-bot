@@ -15,22 +15,29 @@ import hoshino.commands.HelpCommand
 import hoshino.commands.music.*
 import hoshino.handlers.CommandHandler
 import hoshino.handlers.SlashCommandHandler
+import hoshino.plugins.configureRouting
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import io.ktor.server.plugins.cors.routing.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 
 @OptIn(KordPreview::class)
 suspend fun main() {
+    coroutineScope {
+        launch {
+            embeddedServer(Netty, port = 8081, host = "0.0.0.0", module = Application::module)
+                .start(wait = true)
+        }
     val dotenv = dotenv()
     val token = dotenv["BOT_TOKEN"]
     val applicationId = Snowflake(dotenv["APPLICATION_ID"])
     val client = Kord(token)
+
+
 
     val lavalink = client.lavakord()
     lavalink.addNode(
@@ -76,6 +83,7 @@ suspend fun main() {
     client.login{
         presence { playing("I am Ai Hoshino") }
 
+
         @OptIn(PrivilegedIntent::class)
         intents += Intent.MessageContent
         intents += Intent.GuildVoiceStates
@@ -87,19 +95,12 @@ suspend fun main() {
         intents += Intent.DirectMessageTyping
         intents += Intent.DirectMessages
         intents += Intent.GuildWebhooks
+    }
 
-    }
-    embeddedServer(Netty, port = 8080, module = Application::configureRouting)
-        .start(wait = true)
 }
-fun Application.configureRouting() {
-    install(CORS) {
-        anyHost()
-    }
-    routing {
-        get("/") {
-            call.respondText("Hello . Welcome Ai Hoshino !")
-        }
-    }
 }
+fun Application.module() {
+    configureRouting()
+}
+
 

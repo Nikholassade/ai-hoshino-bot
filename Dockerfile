@@ -29,5 +29,8 @@ COPY .env.example /run/.env
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
+# Install Ktor and its dependencies
+RUN apt-get update && apt-get install -y ktor
+
 # Run the app when the container launches
-CMD ["java", "-jar", "/run/hoshino.jar"]
+CMD ["java", "-jar", "/run/hoshino.jar", "--ktor"]

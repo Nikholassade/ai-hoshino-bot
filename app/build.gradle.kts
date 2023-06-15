@@ -10,10 +10,14 @@ plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.ktor.plugin") version "2.3.1"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 }
+
+group = "hoshino"
+version = "0.0.1"
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -66,6 +70,8 @@ java {
 application {
     // Define the main class for the application.
     mainClass.set("hoshino.AppKt")
+    val isDevelopment: Boolean = project.ext.has("development")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 tasks.shadowJar {
