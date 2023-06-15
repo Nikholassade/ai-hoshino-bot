@@ -21,6 +21,10 @@ RUN ./gradlew build --stacktrace
 
 # Copy the built JAR file to /run/hoshino.jar
 WORKDIR /run
+
+# List the files in the /app/app/build/libs directory
+RUN ls -l /app/app/build/libs
+
 RUN cp /app/app/build/libs/hoshino.jar /run/hoshino.jar
 
 # Copy the .env file to the container
