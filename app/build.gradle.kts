@@ -70,7 +70,7 @@ application {
 }
 
 tasks.shadowJar {
-    archiveBaseName.set("hoshino")
+    archiveFileName.set("hoshino.jar")
     archiveClassifier.set("")
     archiveVersion.set("")
     destinationDirectory.set(file("$buildDir/libs"))
