@@ -16,9 +16,6 @@ plugins {
     application
 }
 
-group = "hoshino"
-version = "0.0.1"
-
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -70,8 +67,6 @@ java {
 application {
     // Define the main class for the application.
     mainClass.set("hoshino.AppKt")
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 tasks.shadowJar {
