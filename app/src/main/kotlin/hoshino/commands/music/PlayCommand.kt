@@ -2,11 +2,11 @@ package hoshino.commands.music
 
 import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.kord.core.exception.EntityNotFoundException
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.models.TrackResponse
-import dev.kord.core.exception.EntityNotFoundException
 import hoshino.commands.Command
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,9 +36,17 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             link.connectAudio(channelId.value)
             // Launch a new coroutine to automatically disconnect after 60 seconds of inactivity
             kord.launch {
-                delay(60000)
-                if (link.state == Link.State.CONNECTED && link.player.playingTrack == null) {
-                    link.destroy()
+                var lastPlayed = System.currentTimeMillis()
+                while (true) {
+                    delay(1000)
+                    if (link.player.playingTrack == null) {
+                        if (System.currentTimeMillis() - lastPlayed > 60000) {
+                            link.destroy()
+                            break
+                        }
+                    } else {
+                        lastPlayed = System.currentTimeMillis()
+                    }
                 }
             }
         }
