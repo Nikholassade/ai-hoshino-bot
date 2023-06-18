@@ -55,6 +55,19 @@ class AvatarCommand() : Command {
             format = Image.Format.PNG
             size = Image.Size.Size512
         }
+        // Check if the user has provided a user ID or @mention.
+        if (userOption == null) {
+            commandInteraction.respondPublic {
+                embed {
+                    title = "Please provide a user ID or @mention."
+                    color = Color(255, 0, 0)
+                }
+            }
+            return
+        }
+
+
+        // Get the avatar of the user.
         commandInteraction.respondPublic {
             embed {
                 title = "Avatar ${user.username}"
@@ -72,6 +85,7 @@ class AvatarCommand() : Command {
                 timestamp = Clock.System.now()
             }
         }
+
     }
 
     private suspend fun Message.getUserMention(): User? {
