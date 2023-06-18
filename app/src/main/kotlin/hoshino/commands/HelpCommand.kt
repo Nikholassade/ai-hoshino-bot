@@ -18,7 +18,7 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
         val self = kord.getSelf()
         val avatarUrl = self.avatar?.cdnUrl?.toUrl {
             format = Image.Format.PNG
-            size = Image.Size.Size256
+            size = Image.Size.Size512
         } ?: ""
         message.channel.createEmbed {
             title = "Available Commands"

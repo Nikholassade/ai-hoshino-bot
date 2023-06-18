@@ -25,6 +25,7 @@ repositories {
 //        url = uri("https://m2.dv8tion.net/releases")
         url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
     }
+    maven("https://maven.kotlindiscord.com/repository/maven-public/")
 }
 
 dependencies {
@@ -53,6 +54,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:2.3.1")
     implementation("io.ktor:ktor-server-default-headers-jvm:2.3.1")
     implementation("io.ktor:ktor-server-cors:2.3.1")
+    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.6")
 
 
 }
