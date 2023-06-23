@@ -26,6 +26,10 @@ repositories {
         url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
     }
     maven("https://maven.kotlindiscord.com/repository/maven-public/")
+    maven {
+        name = "Sonatype Snapshots"
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+    }
 }
 
 dependencies {
@@ -54,7 +58,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:2.3.1")
     implementation("io.ktor:ktor-server-default-headers-jvm:2.3.1")
     implementation("io.ktor:ktor-server-cors:2.3.1")
-    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.6")
+//    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.7")
 
 
 }
