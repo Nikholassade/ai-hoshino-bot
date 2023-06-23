@@ -20,6 +20,7 @@ import kotlinx.datetime.Clock
 
 class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Command {
     private val queue = mutableListOf<PartialTrack>()
+    private var trackEndEventCalled = false
 
     override suspend fun execute(event: MessageCreateEvent) {
         val args = event.message.content.split(" ")
@@ -32,9 +33,12 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
         link.player.on<Event, TrackEndEvent> {
-            kord.launch {
-                playNextTrack(link,event)
-                println("TrackEndEvent triggered")
+            if (!trackEndEventCalled) {
+                trackEndEventCalled = true
+                kord.launch {
+                    playNextTrack(link,event)
+                    trackEndEventCalled = false
+                }
             }
         }
         if (link.state != Link.State.CONNECTED) {
@@ -101,7 +105,6 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
     }
 
     private suspend fun playNextTrack(link: Link,event: MessageCreateEvent) {
-        println("playNextTrack called")
         val nextTrack = queue.removeFirstOrNull()
         if (nextTrack != null) {
             try {
@@ -110,8 +113,6 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                 println("Error playing track: ${e.message}")
             }
             event.message.channel.createMessage("Đang phát: `${nextTrack.info.title}`")
-//            val textChannel = kord.getChannelOf<TextChannel>(Snowflake(link.lastChannelId ?: return))
-//            textChannel?.createMessage("Đang phát: ${nextTrack.info.title}")
         }
     }
 
