@@ -1,17 +1,26 @@
 package hoshino.commands.music
 
+import dev.kord.common.Color
 import dev.kord.core.Kord
+import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.exception.EntityNotFoundException
 import dev.schlaubi.lavakord.LavaKord
+import dev.schlaubi.lavakord.audio.Event
 import dev.schlaubi.lavakord.audio.Link
+import dev.schlaubi.lavakord.audio.TrackEndEvent
+import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.rest.loadItem
+import dev.schlaubi.lavakord.rest.models.PartialTrack
 import dev.schlaubi.lavakord.rest.models.TrackResponse
 import hoshino.commands.Command
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
 class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Command {
+    private val queue = mutableListOf<PartialTrack>()
+
     override suspend fun execute(event: MessageCreateEvent) {
         val args = event.message.content.split(" ")
         val query = args.drop(1).joinToString(" ")
@@ -22,6 +31,12 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
         }
 
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
+        link.player.on<Event, TrackEndEvent> {
+            kord.launch {
+                playNextTrack(link,event)
+                println("TrackEndEvent triggered")
+            }
+        }
         if (link.state != Link.State.CONNECTED) {
             val voiceState = try {
                 event.member?.getVoiceState()
@@ -55,16 +70,48 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 
         when (item.loadType) {
             TrackResponse.LoadType.TRACK_LOADED,
-            TrackResponse.LoadType.PLAYLIST_LOADED,
             TrackResponse.LoadType.SEARCH_RESULT -> {
                 link.player.playTrack(item.tracks.first())
                 event.message.channel.createMessage("Đang phát: ${item.tracks.first().info.title}")
+            }
+            TrackResponse.LoadType.PLAYLIST_LOADED -> {
+                queue.addAll(item.tracks)
+                playNextTrack(link,event)
+                event.message.channel.createMessage("Đã thêm playlist vào hàng đợi và bắt đầu phát bài hát đầu tiên")
+                println("Tracks added to queue: ${item.tracks.size}")
+
+                // Create an embed with a list of the tracks in the playlist
+                event.message.channel.createEmbed {
+                    title = "Playlist"
+                    description = item.tracks.joinToString("\n") { it.info.title }
+                    color = Color(49,14,76)
+                    timestamp = Clock.System.now()
+                    footer {
+                        text = "Developer by ${event.message.author?.username}"
+                        icon = event.message.author?.avatar?.cdnUrl?.toUrl()
+                    }
+                }
             }
 
             TrackResponse.LoadType.NO_MATCHES -> event.message.channel.createMessage("No matches")
             TrackResponse.LoadType.LOAD_FAILED -> event.message.channel.createMessage(
                 item.exception?.message ?: "Exception"
             )
+        }
+    }
+
+    private suspend fun playNextTrack(link: Link,event: MessageCreateEvent) {
+        println("playNextTrack called")
+        val nextTrack = queue.removeFirstOrNull()
+        if (nextTrack != null) {
+            try {
+                link.player.playTrack(nextTrack)
+            } catch (e: Exception) {
+                println("Error playing track: ${e.message}")
+            }
+            event.message.channel.createMessage("Đang phát: `${nextTrack.info.title}`")
+//            val textChannel = kord.getChannelOf<TextChannel>(Snowflake(link.lastChannelId ?: return))
+//            textChannel?.createMessage("Đang phát: ${nextTrack.info.title}")
         }
     }
 
