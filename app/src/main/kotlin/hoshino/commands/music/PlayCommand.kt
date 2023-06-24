@@ -17,9 +17,12 @@ import hoshino.commands.Command
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import java.time.Duration
 
+
+val queue = mutableListOf<PartialTrack>()
 class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Command {
-    private val queue = mutableListOf<PartialTrack>()
+
     private var trackEndEventCalled = false
 
     override suspend fun execute(event: MessageCreateEvent) {
@@ -27,13 +30,16 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
         val query = args.drop(1).joinToString(" ")
         val search = if (query.startsWith("http")) {
             query
+        } else if (query.startsWith("http") && query.contains("soundcloud")) {
+            "scsearch:$query"
         } else {
             "ytsearch:$query"
         }
 
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
+
         link.player.on<Event, TrackEndEvent> {
-            if (!trackEndEventCalled) {
+            if (!trackEndEventCalled)  {
                 trackEndEventCalled = true
                 kord.launch {
                     playNextTrack(link,event)
@@ -112,9 +118,43 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             } catch (e: Exception) {
                 println("Error playing track: ${e.message}")
             }
-            event.message.channel.createMessage("Đang phát: `${nextTrack.info.title}`")
+            val duration = Duration.ofMillis(nextTrack.info.length)
+            val durationText = "%02d:%02d".format(duration.toMinutes(), duration.seconds % 60)
+            val videoId = nextTrack.info.uri.split("=").last()
+            val thumbnailUrl = "https://img.youtube.com/vi/$videoId/maxresdefault.jpg"
+            event.message.channel.createEmbed {
+                title = "Đang phát"
+                description = nextTrack.info.title
+                thumbnail {
+                    url = thumbnailUrl
+                }
+                field {
+                    name = "Kênh"
+                    value = nextTrack.info.author
+                    inline = true
+                }
+                field {
+                    name = "Thời lượng"
+                    value = durationText
+                    inline = true
+                }
+
+                field {
+                    name = "Nguồn"
+                    value = nextTrack.info.sourceName
+                    inline = true
+                }
+                color = Color(49, 14, 76)
+                timestamp = Clock.System.now()
+                footer {
+                    text = "Developer by ${event.message.author?.username}"
+                    icon = event.message.author?.avatar?.cdnUrl?.toUrl()
+                }
+            }
+
         }
     }
+
 
 //     suspend fun execute(interaction: Interaction) {
 //         val commandInteraction = interaction as? ApplicationCommandInteraction ?: return

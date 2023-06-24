@@ -22,13 +22,19 @@ repositories {
 
     // Add the 'https://m2.dv8tion.net/releases' repository
     maven {
-//        url = uri("https://m2.dv8tion.net/releases")
+        url = uri("https://m2.dv8tion.net/releases")
+    }
+    maven {
         url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap")
     }
     maven("https://maven.kotlindiscord.com/repository/maven-public/")
     maven {
         name = "Sonatype Snapshots"
         url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+    }
+    maven { url = uri("https://jitpack.io") }
+    maven {
+        url = uri("https://repo.maven.apache.org/maven2/")
     }
 }
 
@@ -58,7 +64,13 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages-jvm:2.3.1")
     implementation("io.ktor:ktor-server-default-headers-jvm:2.3.1")
     implementation("io.ktor:ktor-server-cors:2.3.1")
+    implementation("io.ktor:ktor-client-core:2.3.1")
+    implementation("io.ktor:ktor-client-json:2.3.1")
+    implementation("io.ktor:ktor-client-gson:2.3.1")
+    implementation("io.ktor:ktor-client-apache:2.3.1")
 //    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.7")
+
+    implementation("com.adamratzman:spotify-api-kotlin-jvm:4.0.0")
 
 
 }

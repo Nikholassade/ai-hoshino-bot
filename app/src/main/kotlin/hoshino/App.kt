@@ -37,13 +37,12 @@ suspend fun main() {
     val applicationId = Snowflake(dotenv["APPLICATION_ID"])
     val client = Kord(token)
 
-
-
     val lavalink = client.lavakord()
     lavalink.addNode(
         serverUri = dotenv["LAVALINK_SERVER"],
         password =  dotenv["LAVALINK_PASSWORD"]
     )
+
 
     val logger = LoggerFactory.getLogger("hoshino")
     logger.info("Ai Hoshino started")
