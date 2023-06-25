@@ -1,9 +1,9 @@
-package hoshino.commands.music
+package dev.nthduc.hoshino.commands.music
 
 import dev.kord.core.event.message.MessageCreateEvent
+import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Link
-import hoshino.commands.Command
 
 class PauseCommand(private val lavalink: LavaKord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {

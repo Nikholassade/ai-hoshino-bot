@@ -1,4 +1,4 @@
-package hoshino.commands.music
+package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.entity.Snowflake
 import dev.schlaubi.lavakord.rest.models.PartialTrack

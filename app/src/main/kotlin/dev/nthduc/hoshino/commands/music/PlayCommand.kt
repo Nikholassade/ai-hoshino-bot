@@ -1,10 +1,11 @@
-package hoshino.commands.music
+package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.Color
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.exception.EntityNotFoundException
+import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Event
 import dev.schlaubi.lavakord.audio.Link
@@ -13,7 +14,6 @@ import dev.schlaubi.lavakord.audio.on
 import dev.schlaubi.lavakord.rest.loadItem
 import dev.schlaubi.lavakord.rest.models.PartialTrack
 import dev.schlaubi.lavakord.rest.models.TrackResponse
-import hoshino.commands.Command
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock

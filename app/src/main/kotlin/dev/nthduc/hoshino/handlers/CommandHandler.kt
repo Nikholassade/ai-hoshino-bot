@@ -1,7 +1,7 @@
-package hoshino.handlers
+package dev.nthduc.hoshino.handlers
 
 import dev.kord.core.event.message.MessageCreateEvent
-import hoshino.commands.Command
+import dev.nthduc.hoshino.commands.Command
 
 class CommandHandler {
      val commands = mutableMapOf<String, Command>()

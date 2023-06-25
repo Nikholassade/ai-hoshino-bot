@@ -1,4 +1,4 @@
-package hoshino.kord
+package dev.nthduc.hoshino.kord
 
 import dev.kord.common.entity.Permission
 import dev.kord.common.entity.Permissions

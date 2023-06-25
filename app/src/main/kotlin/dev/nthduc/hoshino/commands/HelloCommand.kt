@@ -1,9 +1,9 @@
-package hoshino.commands
+package dev.nthduc.hoshino.commands
 
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.interaction.ApplicationCommandInteraction
-import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.entity.interaction.Interaction
+import dev.kord.core.event.message.MessageCreateEvent
 
 class HelloCommand() : Command {
         override suspend fun execute(event: MessageCreateEvent) {

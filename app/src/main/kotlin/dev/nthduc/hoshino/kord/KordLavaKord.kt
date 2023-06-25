@@ -1,4 +1,4 @@
-package hoshino.kord
+package dev.nthduc.hoshino.kord
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.event.gateway.DisconnectEvent
