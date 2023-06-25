@@ -1,4 +1,4 @@
-package hoshino.plugins
+package dev.nthduc.hoshino.plugins
 
 import io.ktor.server.application.*
 import io.ktor.server.plugins.cors.routing.*

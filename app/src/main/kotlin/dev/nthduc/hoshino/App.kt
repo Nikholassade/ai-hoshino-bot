@@ -1,4 +1,4 @@
-package hoshino
+package dev.nthduc.hoshino
 
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
@@ -7,15 +7,12 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
+import dev.nthduc.hoshino.commands.*
+import dev.nthduc.hoshino.commands.music.*
+import dev.nthduc.hoshino.handlers.CommandHandler
+import dev.nthduc.hoshino.handlers.SlashCommandHandler
+import dev.nthduc.hoshino.plugins.configureRouting
 import dev.schlaubi.lavakord.kord.lavakord
-import hoshino.commands.AvatarCommand
-import hoshino.commands.CoinflipCommand
-import hoshino.commands.HelloCommand
-import hoshino.commands.HelpCommand
-import hoshino.commands.music.*
-import hoshino.handlers.CommandHandler
-import hoshino.handlers.SlashCommandHandler
-import hoshino.plugins.configureRouting
 import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -53,11 +50,13 @@ suspend fun main() {
     commandHandler.registerCommand("avatar", AvatarCommand())
     commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
     commandHandler.registerCommand("play", PlayCommand(lavalink,client))
+
     commandHandler.registerCommand("stop", StopCommand(lavalink))
     commandHandler.registerCommand("pause", PauseCommand(lavalink))
     commandHandler.registerCommand("resume", ResumeCommand(lavalink))
     commandHandler.registerCommand("leave", LeaveCommand(lavalink))
     commandHandler.registerCommand("connect", ConnectCommand(lavalink))
+    commandHandler.registerCommand("skip", SkipCommand(lavalink))
 
     // Create an instance of the SlashCommandHandler
     val slashCommandHandler = SlashCommandHandler(client, applicationId)
@@ -80,7 +79,7 @@ suspend fun main() {
     }
 
     client.login{
-        presence { playing("I am Ai Hoshino") }
+        presence { playing("Oshi no Ko") }
 
 
         @OptIn(PrivilegedIntent::class)

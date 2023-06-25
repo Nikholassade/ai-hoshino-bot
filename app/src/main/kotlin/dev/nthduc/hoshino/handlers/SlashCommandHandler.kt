@@ -1,4 +1,4 @@
-package hoshino.handlers
+package dev.nthduc.hoshino.handlers
 
 import dev.kord.common.Locale
 import dev.kord.common.annotation.KordPreview

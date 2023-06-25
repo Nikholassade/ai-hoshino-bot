@@ -1,4 +1,4 @@
-package hoshino.commands
+package dev.nthduc.hoshino.commands
 
 import dev.kord.core.event.message.MessageCreateEvent
 

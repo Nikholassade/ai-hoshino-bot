@@ -1,4 +1,4 @@
-package hoshino.commands
+package dev.nthduc.hoshino.commands
 
 import dev.kord.common.Color
 import dev.kord.common.entity.Snowflake

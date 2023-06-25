@@ -84,7 +84,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("hoshino.AppKt")
+    mainClass.set("dev.nthduc.hoshino.AppKt")
 }
 
 tasks.shadowJar {

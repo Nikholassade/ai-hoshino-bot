@@ -1,0 +1,24 @@
+package dev.nthduc.hoshino.commands.music
+
+import dev.kord.core.event.message.MessageCreateEvent
+import dev.nthduc.hoshino.commands.Command
+import dev.schlaubi.lavakord.LavaKord
+
+class SkipCommand(private val lavalink: LavaKord) : Command {
+    override suspend fun execute(event: MessageCreateEvent) {
+        val link = lavalink.getLink(event.guildId?.toString() ?: return)
+        if (queue.size > 1) {
+            val currentTrack = link.player.playingTrack
+            if (currentTrack != null) {
+                val duration = currentTrack.length.inWholeSeconds
+                print("DURATION: $duration")
+                link.player.seekTo(duration - currentTrack.length.inWholeSeconds.minus(1))
+            }
+            event.message.channel.createMessage("Skipped current track")
+        } else {
+            event.message.channel.createMessage("Cannot skip the last track in the playlist")
+        }
+    }
+    override val description: String
+        get() = "Skipped current track"
+}

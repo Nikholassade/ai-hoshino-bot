@@ -1,9 +1,9 @@
-package hoshino.commands
+package dev.nthduc.hoshino.commands
 
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.interaction.ApplicationCommandInteraction
-import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.entity.interaction.Interaction
+import dev.kord.core.event.message.MessageCreateEvent
 import java.util.*
 
 class CoinflipCommand() : Command {
