@@ -1,10 +1,14 @@
 package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.Color
+import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.exception.EntityNotFoundException
+import dev.kord.rest.builder.component.ActionRowBuilder
+import dev.kord.rest.builder.message.EmbedBuilder
+import dev.kord.rest.builder.message.create.UserMessageCreateBuilder
 import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Event
@@ -124,7 +128,8 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             val durationText = "%02d:%02d".format(duration.toMinutes(), duration.seconds % 60)
             val videoId = nextTrack.info.uri.split("=").last()
             val thumbnailUrl = "https://img.youtube.com/vi/$videoId/maxresdefault.jpg"
-            event.message.channel.createEmbed {
+
+            val embed = EmbedBuilder().apply {
                 title = "Đang phát"
                 description = nextTrack.info.title
                 thumbnail {
@@ -154,6 +159,21 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                 }
             }
 
+            val messageBuilder = UserMessageCreateBuilder()
+            messageBuilder.content = "Here is a button for you!"
+            messageBuilder.components.add(ActionRowBuilder().apply {
+                interactionButton(ButtonStyle.Primary, "myButtonId") {
+                    label = "Click me!"
+                }
+            })
+            event.kord.rest.channel.createMessage(event.message.channelId) {
+                embeds.add(embed)
+                components.add(ActionRowBuilder().apply {
+                    interactionButton(ButtonStyle.Primary, "myButtonId") {
+                        label = "Click me!"
+                    }
+                })
+            }
         }
     }
 
@@ -204,5 +224,5 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 //     }
 
     override val description: String
-        get() = "Play a song from Youtube, Soundclound, Spotify"
+        get() = "Play a song from Youtube, Soundcloud, Spotify"
 }
