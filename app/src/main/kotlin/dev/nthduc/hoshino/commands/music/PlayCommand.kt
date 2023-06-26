@@ -1,10 +1,17 @@
 package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.Color
+import dev.kord.common.entity.ButtonStyle
+import dev.kord.common.entity.ComponentType
+import dev.kord.common.entity.optional.Optional
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
+import dev.kord.core.cache.data.ChatComponentData
+import dev.kord.core.entity.component.ButtonComponent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.exception.EntityNotFoundException
+import dev.kord.rest.builder.component.ActionRowBuilder
+import dev.kord.rest.builder.message.create.UserMessageCreateBuilder
 import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Event
@@ -154,6 +161,28 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                 }
             }
 
+            val buttonData = ChatComponentData(
+                type = ComponentType.Button,
+                customId = Optional.Value("myButtonId"),
+                label = Optional.Value("Click me!"),
+                style = Optional.Value(ButtonStyle.Primary)
+            )
+            val button = ButtonComponent(buttonData)
+            val messageBuilder = UserMessageCreateBuilder()
+            messageBuilder.content = "Here is a button for you!"
+            messageBuilder.components.add(ActionRowBuilder().apply {
+                interactionButton(ButtonStyle.Primary, "myButtonId") {
+                    label = "Click me!"
+                }
+            })
+            event.kord.rest.channel.createMessage(event.message.channelId) {
+                content = "Here is a button for you!"
+                components.add(ActionRowBuilder().apply {
+                    interactionButton(ButtonStyle.Primary, "myButtonId") {
+                        label = "Click me!"
+                    }
+                })
+            }
         }
     }
 
@@ -204,5 +233,5 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 //     }
 
     override val description: String
-        get() = "Play a song from Youtube, Soundclound, Spotify"
+        get() = "Play a song from Youtube, Soundcloud, Spotify"
 }
