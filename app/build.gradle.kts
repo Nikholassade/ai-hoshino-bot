@@ -36,6 +36,10 @@ repositories {
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
     }
+    maven {
+        name = "topiWTFReleases"
+        url = uri("https://maven.topi.wtf/releases")
+    }
 }
 
 dependencies {
@@ -70,7 +74,7 @@ dependencies {
     implementation("io.ktor:ktor-client-apache:2.3.1")
 //    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.7")
 
-    implementation("com.adamratzman:spotify-api-kotlin-jvm:4.0.0")
+    implementation("com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.4")
 
 
 }

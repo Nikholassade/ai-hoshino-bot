@@ -32,6 +32,8 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             query
         } else if (query.startsWith("http") && query.contains("soundcloud")) {
             "scsearch:$query"
+        } else if (query.startsWith("http") && query.contains("spotify")) {
+            "spsearch:$query"
         } else {
             "ytsearch:$query"
         }
@@ -110,7 +112,7 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
         }
     }
 
-    private suspend fun playNextTrack(link: Link,event: MessageCreateEvent) {
+      private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
         val nextTrack = queue.removeFirstOrNull()
         if (nextTrack != null) {
             try {
@@ -202,5 +204,5 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 //     }
 
     override val description: String
-        get() = "Play a song"
+        get() = "Play a song from Youtube, Soundclound, Spotify"
 }
