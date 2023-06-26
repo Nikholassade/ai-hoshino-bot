@@ -7,7 +7,10 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import dev.nthduc.hoshino.commands.*
+import dev.nthduc.hoshino.commands.AvatarCommand
+import dev.nthduc.hoshino.commands.CoinflipCommand
+import dev.nthduc.hoshino.commands.HelloCommand
+import dev.nthduc.hoshino.commands.HelpCommand
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
