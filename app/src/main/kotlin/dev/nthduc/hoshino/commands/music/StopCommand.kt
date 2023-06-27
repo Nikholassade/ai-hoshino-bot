@@ -15,7 +15,7 @@ class StopCommand(private val lavalink: LavaKord) : Command {
             link.destroy()
             event.message.channel.createMessage("Đã dừng phát nhạc ! Hẹn gặp lại ❌ ")
         } else {
-            event.message.channel.createMessage("❌ > ***Not currently playing a track***")
+            event.message.channel.createMessage("❌ ***Not currently playing a track***")
         }
     }
 

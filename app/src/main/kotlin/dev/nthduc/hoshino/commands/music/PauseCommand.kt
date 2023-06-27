@@ -1,5 +1,6 @@
 package dev.nthduc.hoshino.commands.music
 
+import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
@@ -13,6 +14,15 @@ class PauseCommand(private val lavalink: LavaKord) : Command {
             event.message.channel.createMessage("Đã tạm dừng phát nhạc !")
         } else {
             event.message.channel.createMessage("Not currently playing a track")
+        }
+    }
+    suspend fun execute(event: ButtonInteractionCreateEvent) {
+        val link = lavalink.getLink(event.interaction.data.guildId.value?.toString() ?: return)
+        if (link.state == Link.State.CONNECTED) {
+            link.player.pause()
+            event.interaction.channel.createMessage("Đã tạm dừng phát nhạc !")
+        } else {
+            event.interaction.channel.createMessage("Not currently playing a track")
         }
     }
 
