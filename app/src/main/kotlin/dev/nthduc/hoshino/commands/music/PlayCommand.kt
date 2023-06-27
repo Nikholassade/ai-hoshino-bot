@@ -169,8 +169,8 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             event.kord.rest.channel.createMessage(event.message.channelId) {
                 embeds.add(embed)
                 components.add(ActionRowBuilder().apply {
-                    interactionButton(ButtonStyle.Primary, "myButtonId") {
-                        label = "Click me!"
+                    interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                        label = "Pause"
                     }
                 })
             }
