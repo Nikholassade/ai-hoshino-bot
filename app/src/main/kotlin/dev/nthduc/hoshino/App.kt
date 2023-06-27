@@ -3,7 +3,6 @@ package dev.nthduc.hoshino
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
-import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
@@ -54,10 +53,9 @@ suspend fun main() {
     commandHandler.registerCommand("avatar", AvatarCommand())
     commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
     commandHandler.registerCommand("play", PlayCommand(lavalink,client))
-        commandHandler.registerCommand("playtest", PlayCommand(lavalink,client))
 
 
-        commandHandler.registerCommand("stop", StopCommand(lavalink))
+    commandHandler.registerCommand("stop", StopCommand(lavalink))
     commandHandler.registerCommand("pause", PauseCommand(lavalink))
     commandHandler.registerCommand("resume", ResumeCommand(lavalink))
     commandHandler.registerCommand("leave", LeaveCommand(lavalink))
@@ -81,6 +79,7 @@ suspend fun main() {
 
     client.on<MessageCreateEvent> {
         logger.debug("Received message: ${message.content}")
+        message.channel.type()
         commandHandler.handleCommand(this)
     }
 
