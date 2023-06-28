@@ -1,19 +1,15 @@
 package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.Color
-import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
-import dev.kord.core.behavior.edit
-import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.exception.EntityNotFoundException
 import dev.kord.core.on
-import dev.kord.rest.builder.component.ActionRowBuilder
-import dev.kord.rest.builder.message.EmbedBuilder
-import dev.kord.rest.builder.message.create.UserMessageCreateBuilder
 import dev.nthduc.hoshino.commands.Command
+import dev.nthduc.hoshino.embeds.TrackEmbed
+import dev.nthduc.hoshino.handlers.ButtonHandler
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Event
 import dev.schlaubi.lavakord.audio.Link
@@ -25,7 +21,6 @@ import dev.schlaubi.lavakord.rest.models.TrackResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
-import java.time.Duration
 
 
 val queue = mutableListOf<PartialTrack>()
@@ -121,113 +116,12 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
     }
 
       private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
-        val nextTrack = queue.removeFirstOrNull()
-        if (nextTrack != null) {
-            try {
-                link.player.playTrack(nextTrack)
-            } catch (e: Exception) {
-                println("Error playing track: ${e.message}")
-            }
-            val duration = Duration.ofMillis(nextTrack.info.length)
-            val durationText = "%02d:%02d".format(duration.toMinutes(), duration.seconds % 60)
-            val videoId = nextTrack.info.uri.split("=").last()
-            val thumbnailUrl = "https://img.youtube.com/vi/$videoId/maxresdefault.jpg"
-
-            val embed = EmbedBuilder().apply {
-                title = "Đang phát"
-                description = nextTrack.info.title
-                thumbnail {
-                    url = thumbnailUrl
-                }
-                field {
-                    name = "Kênh"
-                    value = nextTrack.info.author
-                    inline = true
-                }
-                field {
-                    name = "Thời lượng"
-                    value = durationText
-                    inline = true
-                }
-
-                field {
-                    name = "Nguồn"
-                    value = nextTrack.info.sourceName
-                    inline = true
-                }
-                color = Color(49, 14, 76)
-                timestamp = Clock.System.now()
-                footer {
-                    text = "Developer by ${event.message.author?.username}"
-                    icon = event.message.author?.avatar?.cdnUrl?.toUrl()
-                }
-            }
-
-            val messageBuilder = UserMessageCreateBuilder()
-            messageBuilder.content = "Here is a button for you!"
-            messageBuilder.components.add(ActionRowBuilder().apply {
-                interactionButton(ButtonStyle.Primary, "myButtonId") {
-                    label = "Click me!"
-                }
-            })
-
-            event.kord.rest.channel.createMessage(event.message.channelId) {
-                embeds.add(embed)
-                components.add(ActionRowBuilder().apply {
-                    interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                        label = "Pause"
-                        disabled = false
-                    }
-                    interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                        label = "Resume"
-                        disabled = true
-                    }
-                })
-            }
-            kord.on<ButtonInteractionCreateEvent> {
-                when (interaction.componentId) {
-                    "pauseBtn" -> {
-                        // Pause the track
-                        link.player.pause()
-                        interaction.respondPublic {
-                            embeds.add(embed)
-                            content = "Đã dừng phát nhạc"
-                            components.add(ActionRowBuilder().apply {
-                                interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                                    label = "Pause"
-                                    disabled = true
-                                }
-                                interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                                    label = "Resume"
-                                    disabled = false
-                                }
-                            })
-                        }
-                    }
-
-                    "resumeBtn" -> {
-                        // Resume the track
-                        link.player.unPause()
-                        interaction.respondPublic {
-                            content = "Đã tiếp tục phát nhạc"
-                        }
-                        interaction.message.edit {
-                            components?.set(2, ActionRowBuilder().apply {
-                                interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                                    label = "Pause"
-                                    disabled = false
-                                }
-                                interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                                    label = "Resume"
-                                    disabled = true
-                                }
-                            })
-                        }
-                    }
-                }
-            }
+          val trackPlayer = TrackPlayer(link)
+          trackPlayer.playNextTrack(queue, event)
+          val buttonHandler = ButtonHandler(link)
+          val embed = TrackEmbed(trackPlayer.nextTrack!!, event).build()
+              kord.on<ButtonInteractionCreateEvent> { buttonHandler.handleButtonInteraction(this, embed) }
         }
-    }
 
 
 //     suspend fun execute(interaction: Interaction) {
