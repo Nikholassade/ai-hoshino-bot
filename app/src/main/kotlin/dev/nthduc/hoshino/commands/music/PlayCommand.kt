@@ -4,6 +4,7 @@ import dev.kord.common.Color
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
+import dev.kord.core.behavior.edit
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
@@ -169,20 +170,59 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                     label = "Click me!"
                 }
             })
+
             event.kord.rest.channel.createMessage(event.message.channelId) {
                 embeds.add(embed)
                 components.add(ActionRowBuilder().apply {
                     interactionButton(ButtonStyle.Primary, "pauseBtn") {
                         label = "Pause"
+                        disabled = false
+                    }
+                    interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                        label = "Resume"
+                        disabled = true
                     }
                 })
             }
             kord.on<ButtonInteractionCreateEvent> {
-                if (interaction.componentId == "pauseBtn") {
-                    // Pause the track
-                    link.player.pause()
-                    interaction.respondPublic {
-                        content = "Đã dừng phát nhạc"
+                when (interaction.componentId) {
+                    "pauseBtn" -> {
+                        // Pause the track
+                        link.player.pause()
+                        interaction.respondPublic {
+                            embeds.add(embed)
+                            content = "Đã dừng phát nhạc"
+                            components.add(ActionRowBuilder().apply {
+                                interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                    label = "Pause"
+                                    disabled = true
+                                }
+                                interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                    label = "Resume"
+                                    disabled = false
+                                }
+                            })
+                        }
+                    }
+
+                    "resumeBtn" -> {
+                        // Resume the track
+                        link.player.unPause()
+                        interaction.respondPublic {
+                            content = "Đã tiếp tục phát nhạc"
+                        }
+                        interaction.message.edit {
+                            components?.set(2, ActionRowBuilder().apply {
+                                interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                    label = "Pause"
+                                    disabled = false
+                                }
+                                interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                    label = "Resume"
+                                    disabled = true
+                                }
+                            })
+                        }
                     }
                 }
             }
