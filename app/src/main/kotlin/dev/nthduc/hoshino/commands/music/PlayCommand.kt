@@ -4,8 +4,11 @@ import dev.kord.common.Color
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
+import dev.kord.core.behavior.interaction.respondPublic
+import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.exception.EntityNotFoundException
+import dev.kord.core.on
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
 import dev.kord.rest.builder.message.create.UserMessageCreateBuilder
@@ -173,6 +176,15 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                         label = "Pause"
                     }
                 })
+            }
+            kord.on<ButtonInteractionCreateEvent> {
+                if (interaction.componentId == "pauseBtn") {
+                    // Pause the track
+                    link.player.pause()
+                    interaction.respondPublic {
+                        content = "Đã dừng phát nhạc"
+                    }
+                }
             }
         }
     }
