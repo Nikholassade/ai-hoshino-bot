@@ -30,7 +30,10 @@ class TrackPlayer(private val link: Link) {
                         label = "Tiếp tục phát"
                         disabled = true
                     }
-
+                    interactionButton(ButtonStyle.Success, "skipBtn") {
+                        label = "Bài tiếp theo"
+                        disabled = queue.size < 1
+                    }
                 })
             }
         }
