@@ -9,32 +9,33 @@ import dev.schlaubi.lavakord.rest.models.PartialTrack
 
 class TrackPlayer(private val link: Link) {
     val nextTrack = queue.removeFirstOrNull()
-    suspend fun playNextTrack(queue: MutableList<PartialTrack>, event: MessageCreateEvent) {
-
+    suspend fun playNextTrack(queue: MutableList<PartialTrack>, event: MessageCreateEvent,sendEmbed: Boolean = true) {
         if (nextTrack != null) {
             try {
                 link.player.playTrack(nextTrack)
             } catch (e: Exception) {
                 println("Error playing track: ${e.message}")
             }
-            val embed = TrackEmbed(nextTrack, event).build()
+            if (sendEmbed) {
+                val embed = TrackEmbed(nextTrack, event).build()
 
-            event.kord.rest.channel.createMessage(event.message.channelId) {
-                embeds.add(embed)
-                components.add(ActionRowBuilder().apply {
-                    interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                        label = "Tạm dừng phát"
-                        disabled = false
-                    }
-                    interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                        label = "Tiếp tục phát"
-                        disabled = true
-                    }
-                    interactionButton(ButtonStyle.Success, "skipBtn") {
-                        label = "Bài tiếp theo"
-                        disabled = queue.size < 1
-                    }
-                })
+                event.kord.rest.channel.createMessage(event.message.channelId) {
+                    embeds.add(embed)
+                    components.add(ActionRowBuilder().apply {
+                        interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                            label = "Tạm dừng phát"
+                            disabled = false
+                        }
+                        interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                            label = "Tiếp tục phát"
+                            disabled = true
+                        }
+                        interactionButton(ButtonStyle.Success, "skipBtn") {
+                            label = "Bài tiếp theo"
+                            disabled = queue.size < 1
+                        }
+                    })
+                }
             }
         }
     }

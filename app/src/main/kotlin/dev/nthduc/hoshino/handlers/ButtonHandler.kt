@@ -3,79 +3,94 @@ package dev.nthduc.hoshino.handlers
 import dev.kord.common.entity.ButtonStyle
 import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
+import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.nthduc.hoshino.commands.music.TrackPlayer
 import dev.nthduc.hoshino.commands.music.queue
 import dev.schlaubi.lavakord.audio.Link
+import kotlinx.coroutines.launch
 
-class ButtonHandler(private val link: Link) {
+class ButtonHandler(private val link: Link,
+                    private val trackPlayer: TrackPlayer,
+                    private val event: MessageCreateEvent,
+) {
     suspend fun handleButtonInteraction(interaction: ButtonInteractionCreateEvent, embed: EmbedBuilder) {
         when (interaction.interaction.componentId) {
             "pauseBtn" -> {
-                // Pause the track
-                link.player.pause()
-                interaction.interaction.respondPublic {
-                    embeds.add(embed)
-                    content = "Đã dừng phát nhạc"
-                    components.add(ActionRowBuilder().apply {
-                        interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                            label = "Tạm dừng phát"
-                            disabled = true
-                        }
-                        interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                            label = "Tiếp tục phát"
-                            disabled = false
-                        }
-                        interactionButton(ButtonStyle.Secondary, "skipBtn") {
-                            label = "Bài tiếp theo"
-                            disabled = queue.size < 1
-                        }
-                    })
+                interaction.kord.launch {
+                    // Pause the track
+                    link.player.pause()
+                    interaction.interaction.respondPublic {
+                        embeds.add(embed)
+                        content = "Đã dừng phát nhạc"
+                        components.add(ActionRowBuilder().apply {
+                            interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                label = "Tạm dừng phát"
+                                disabled = true
+                            }
+                            interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                label = "Tiếp tục phát"
+                                disabled = false
+                            }
+                            interactionButton(ButtonStyle.Secondary, "skipBtn") {
+                                label = "Bài tiếp theo"
+                                disabled = queue.size < 1
+                            }
+                        })
+                    }
                 }
             }
+
             "resumeBtn" -> {
-                // Resume the track
-                link.player.unPause()
-                interaction.interaction.respondPublic {
-                    embeds.add(embed)
-                    content = "Đã tiếp tục phát nhạc"
-                    components.add(ActionRowBuilder().apply {
-                        interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                            label = "Tạm dừng phát"
-                            disabled = false
-                        }
-                        interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                            label = "Tiếp tục phát"
-                            disabled = true
-                        }
-                        interactionButton(ButtonStyle.Success, "skipBtn") {
-                            label = "Bài tiếp theo"
-                            disabled = queue.size < 1
-                        }
-                    })
+                interaction.kord.launch {
+                    // Resume the track
+                    link.player.unPause()
+                    interaction.interaction.respondPublic {
+                        embeds.add(embed)
+                        content = "Đã tiếp tục phát nhạc"
+                        components.add(ActionRowBuilder().apply {
+                            interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                label = "Tạm dừng phát"
+                                disabled = false
+                            }
+                            interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                label = "Tiếp tục phát"
+                                disabled = true
+                            }
+                            interactionButton(ButtonStyle.Success, "skipBtn") {
+                                label = "Bài tiếp theo"
+                                disabled = queue.size < 1
+                            }
+                        })
+                    }
                 }
             }
+
             "skipBtn" -> {
-                // Skip the current track and play the next one
-                interaction.interaction.respondPublic {
-                    embeds.add(embed)
-                    content = "Đã bỏ qua bài hát hiện tại và chuyển qua bài kế tiếp"
-                    components.add(ActionRowBuilder().apply {
-                        interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                            label = "Tạm dừng phát"
-                            disabled = false
-                        }
-                        interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                            label = "Tiếp tục phát"
-                            disabled = true
-                        }
-                        interactionButton(ButtonStyle.Success, "skipBtn") {
-                            label = "Bài tiếp theo"
-                            disabled = queue.size < 1
-                        }
-                    })
+                interaction.kord.launch {
+                    trackPlayer.playNextTrack(queue,event,false)
+                    // Skip the current track and play the next one
+                    interaction.interaction.respondPublic {
+                        embeds.add(embed)
+                        content = "Đã bỏ qua bài hát hiện tại và chuyển qua bài kế tiếp"
+                        components.add(ActionRowBuilder().apply {
+                            interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                label = "Tạm dừng phát"
+                                disabled = false
+                            }
+                            interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                label = "Tiếp tục phát"
+                                disabled = true
+                            }
+                            interactionButton(ButtonStyle.Success, "skipBtn") {
+                                label = "Bài tiếp theo"
+                                disabled = queue.size < 1
+                            }
+                        })
+                    }
                 }
             }
         }
     }
-        }
+}
