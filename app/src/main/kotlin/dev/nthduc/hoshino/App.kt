@@ -53,7 +53,6 @@ suspend fun main() {
     commandHandler.registerCommand("avatar", AvatarCommand())
     commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
     commandHandler.registerCommand("play", PlayCommand(lavalink,client))
-        commandHandler.registerCommand("playtest", PlayCommand(lavalink,client))
 
     commandHandler.registerCommand("stop", StopCommand(lavalink))
     commandHandler.registerCommand("pause", PauseCommand(lavalink))
