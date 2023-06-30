@@ -7,10 +7,7 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import dev.nthduc.hoshino.commands.AvatarCommand
-import dev.nthduc.hoshino.commands.CoinflipCommand
-import dev.nthduc.hoshino.commands.HelloCommand
-import dev.nthduc.hoshino.commands.HelpCommand
+import dev.nthduc.hoshino.commands.*
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
@@ -32,75 +29,82 @@ suspend fun main() {
             embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
                 .start(wait = true)
         }
-    val dotenv = dotenv()
-    val token = dotenv["BOT_TOKEN"]
-    val applicationId = Snowflake(dotenv["APPLICATION_ID"])
-    val client = Kord(token)
+        val dotenv = dotenv()
+        val token = dotenv["BOT_TOKEN"]
+        val applicationId = Snowflake(dotenv["APPLICATION_ID"])
+        val client = Kord(token)
 
-    val lavalink = client.lavakord()
-    lavalink.addNode(
-        serverUri = dotenv["LAVALINK_SERVER"],
-        password =  dotenv["LAVALINK_PASSWORD"]
-    )
-
-
-    val logger = LoggerFactory.getLogger("hoshino")
-    logger.info("Ai Hoshino started")
-
-    val commandHandler = CommandHandler()
-    commandHandler.registerCommand("hello", HelloCommand())
-    commandHandler.registerCommand("coinflip", CoinflipCommand())
-    commandHandler.registerCommand("avatar", AvatarCommand())
-    commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
-    commandHandler.registerCommand("play", PlayCommand(lavalink,client))
-
-    commandHandler.registerCommand("stop", StopCommand(lavalink))
-    commandHandler.registerCommand("pause", PauseCommand(lavalink))
-    commandHandler.registerCommand("resume", ResumeCommand(lavalink))
-    commandHandler.registerCommand("leave", LeaveCommand(lavalink))
-    commandHandler.registerCommand("connect", ConnectCommand(lavalink))
-    commandHandler.registerCommand("skip", SkipCommand(lavalink))
-
-    // Create an instance of the SlashCommandHandler
-    val slashCommandHandler = SlashCommandHandler(client, applicationId)
-    val helloCommand = HelloCommand()
-    val coinflipCommand = CoinflipCommand()
-    val avatarCommand = AvatarCommand()
-    val helpCommand = HelpCommand(commandHandler.commands)
-    slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
-    slashCommandHandler.registerCommand("coinflip", "Flip a coin", coinflipCommand::execute)
-    slashCommandHandler.registerCommand("avatar", "Get Avatar", avatarCommand::execute)
-    slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
+        val lavalink = client.lavakord()
+        lavalink.addNode(
+            serverUri = dotenv["LAVALINK_SERVER"],
+            password = dotenv["LAVALINK_PASSWORD"]
+        )
 
 
-    slashCommandHandler.listen()
-    // Đăng ký các lệnh khác với commandHandler
+        val logger = LoggerFactory.getLogger("hoshino")
+        logger.info("Ai Hoshino started")
 
-    client.on<MessageCreateEvent> {
-        logger.debug("Received message: ${message.content}")
-        message.channel.type()
-        commandHandler.handleCommand(this)
+        val commandHandler = CommandHandler()
+        commandHandler.registerCommand("hello", HelloCommand())
+        commandHandler.registerCommand("coinflip", CoinflipCommand())
+        commandHandler.registerCommand("avatar", AvatarCommand())
+        commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
+        commandHandler.registerCommand("play", PlayCommand(lavalink, client))
+
+        commandHandler.registerCommand("stop", StopCommand(lavalink))
+        commandHandler.registerCommand("pause", PauseCommand(lavalink))
+        commandHandler.registerCommand("resume", ResumeCommand(lavalink))
+        commandHandler.registerCommand("leave", LeaveCommand(lavalink))
+        commandHandler.registerCommand("connect", ConnectCommand(lavalink))
+        commandHandler.registerCommand("skip", SkipCommand(lavalink))
+
+        commandHandler.registerCommand("serverinfo", ServerInfoCommand())
+
+        // Create an instance of the SlashCommandHandler
+        val slashCommandHandler = SlashCommandHandler(client, applicationId)
+        val helloCommand = HelloCommand()
+        val coinflipCommand = CoinflipCommand()
+        val avatarCommand = AvatarCommand()
+        val helpCommand = HelpCommand(commandHandler.commands)
+        val serverInfoCommand = ServerInfoCommand()
+
+        slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
+        slashCommandHandler.registerCommand("coinflip", "Flip a coin", coinflipCommand::execute)
+        slashCommandHandler.registerCommand("avatar", "Get Avatar", avatarCommand::execute)
+        slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
+        slashCommandHandler.registerCommand("serverinfo", "Hiển thị thông tin về Server", serverInfoCommand::execute)
+
+
+        slashCommandHandler.listen()
+        // Đăng ký các lệnh khác với commandHandler
+
+        client.on<MessageCreateEvent> {
+            logger.debug("Received message: ${message.content}")
+            message.channel.type()
+            commandHandler.handleCommand(this)
+        }
+
+        client.login {
+            presence { playing("Oshi no Ko") }
+
+
+            @OptIn(PrivilegedIntent::class)
+            intents += Intent.MessageContent
+            intents += Intent.GuildVoiceStates
+            intents += Intent.GuildMessageTyping
+            intents += Intent.Guilds
+            intents += Intent.GuildWebhooks
+            intents += Intent.AutoModerationConfiguration
+            intents += Intent.AutoModerationExecution
+            intents += Intent.AutoModerationExecution
+            intents += Intent.DirectMessageTyping
+            intents += Intent.DirectMessages
+            intents += Intent.GuildWebhooks
+        }
+
     }
-
-    client.login{
-        presence { playing("Oshi no Ko") }
-
-
-        @OptIn(PrivilegedIntent::class)
-        intents += Intent.MessageContent
-        intents += Intent.GuildVoiceStates
-        intents += Intent.GuildMessageTyping
-        intents += Intent.Guilds
-        intents += Intent.AutoModerationConfiguration
-        intents += Intent.AutoModerationExecution
-        intents += Intent.AutoModerationExecution
-        intents += Intent.DirectMessageTyping
-        intents += Intent.DirectMessages
-        intents += Intent.GuildWebhooks
-    }
-
 }
-}
+
 fun Application.module() {
     configureRouting()
 }

@@ -59,7 +59,7 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             }
             val channelId = voiceState?.channelId
             if (channelId == null) {
-                event.message.channel.createMessage("Please connect to a voice channel")
+                event.message.channel.createMessage("Bạn phải tham gia kênh thoại trước ạ !")
                 return
             }
             link.connectAudio(channelId.value)
