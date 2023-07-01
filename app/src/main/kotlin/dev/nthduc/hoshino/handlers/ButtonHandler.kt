@@ -20,24 +20,26 @@ class ButtonHandler(private val link: Link,
             "pauseBtn" -> {
                 interaction.kord.launch {
                     // Pause the track
-                    link.player.pause()
-                    interaction.interaction.respondPublic {
-                        embeds.add(embed)
-                        content = "Đã dừng phát nhạc"
-                        components.add(ActionRowBuilder().apply {
-                            interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                                label = "Tạm dừng phát"
-                                disabled = true
-                            }
-                            interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                                label = "Tiếp tục phát"
-                                disabled = false
-                            }
-                            interactionButton(ButtonStyle.Secondary, "skipBtn") {
-                                label = "Bài tiếp theo"
-                                disabled = queue.size < 1
-                            }
-                        })
+                    if(link.state == Link.State.CONNECTED) {
+                        link.player.pause()
+                        interaction.interaction.respondPublic {
+                            embeds.add(embed)
+                            content = "Đã dừng phát nhạc"
+                            components.add(ActionRowBuilder().apply {
+                                interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                    label = "Tạm dừng phát"
+                                    disabled = true
+                                }
+                                interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                    label = "Tiếp tục phát"
+                                    disabled = false
+                                }
+                                interactionButton(ButtonStyle.Secondary, "skipBtn") {
+                                    label = "Bài tiếp theo"
+                                    disabled = queue.size < 1
+                                }
+                            })
+                        }
                     }
                 }
             }
@@ -45,49 +47,36 @@ class ButtonHandler(private val link: Link,
             "resumeBtn" -> {
                 interaction.kord.launch {
                     // Resume the track
-                    link.player.unPause()
-                    interaction.interaction.respondPublic {
-                        embeds.add(embed)
-                        content = "Đã tiếp tục phát nhạc"
-                        components.add(ActionRowBuilder().apply {
-                            interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                                label = "Tạm dừng phát"
-                                disabled = false
-                            }
-                            interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                                label = "Tiếp tục phát"
-                                disabled = true
-                            }
-                            interactionButton(ButtonStyle.Success, "skipBtn") {
-                                label = "Bài tiếp theo"
-                                disabled = queue.size < 1
-                            }
-                        })
-                    }
+                        link.player.unPause()
+                        interaction.interaction.respondPublic {
+                            embeds.add(embed)
+                            content = "Đã tiếp tục phát nhạc"
+                            components.add(ActionRowBuilder().apply {
+                                interactionButton(ButtonStyle.Primary, "pauseBtn") {
+                                    label = "Tạm dừng phát"
+                                    disabled = false
+                                }
+                                interactionButton(ButtonStyle.Secondary, "resumeBtn") {
+                                    label = "Tiếp tục phát"
+                                    disabled = true
+                                }
+                                interactionButton(ButtonStyle.Success, "skipBtn") {
+                                    label = "Bài tiếp theo"
+                                    disabled = queue.size < 1
+                                }
+                            })
+                        }
                 }
             }
 
             "skipBtn" -> {
                 interaction.kord.launch {
                     trackPlayer.playNextTrack(queue,event,false)
-                    // Skip the current track and play the next one
-                    interaction.interaction.respondPublic {
-                        embeds.add(embed)
-                        content = "Đã bỏ qua bài hát hiện tại và chuyển qua bài kế tiếp"
-                        components.add(ActionRowBuilder().apply {
-                            interactionButton(ButtonStyle.Primary, "pauseBtn") {
-                                label = "Tạm dừng phát"
-                                disabled = false
-                            }
-                            interactionButton(ButtonStyle.Secondary, "resumeBtn") {
-                                label = "Tiếp tục phát"
-                                disabled = true
-                            }
-                            interactionButton(ButtonStyle.Success, "skipBtn") {
-                                label = "Bài tiếp theo"
-                                disabled = queue.size < 1
-                            }
-                        })
+
+                    if(link.state == Link.State.CONNECTED) {
+                        interaction.interaction.respondPublic {
+                            content = "Đã bỏ qua bài hát hiện tại"
+                        }
                     }
                 }
             }

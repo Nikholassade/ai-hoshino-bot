@@ -1,6 +1,7 @@
 package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.Color
+import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
@@ -20,6 +21,7 @@ import dev.schlaubi.lavakord.rest.models.PartialTrack
 import dev.schlaubi.lavakord.rest.models.TrackResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 
 
@@ -96,13 +98,13 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 
                 // Create an embed with a list of the tracks in the playlist
                 event.message.channel.createEmbed {
-                    title = "Playlist"
+                    title = "Danh sách phát"
                     description = item.tracks.joinToString("\n") { it.info.title }
                     color = Color(49,14,76)
                     timestamp = Clock.System.now()
                     footer {
-                        text = "Developer by ${event.message.author?.username}"
-                        icon = event.message.author?.avatar?.cdnUrl?.toUrl()
+                        text = "Bot được phát triển bởi ${runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.username.toString()}"
+                        icon = runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.avatar?.cdnUrl?.toUrl()
                     }
                 }
             }
@@ -113,7 +115,6 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             )
         }
     }
-
       private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
           val trackPlayer = TrackPlayer(link)
           trackPlayer.playNextTrack(queue,event,true)
