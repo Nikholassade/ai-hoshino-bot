@@ -49,6 +49,7 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                 trackEndEventCalled = true
                 kord.launch {
                     playNextTrack(link,event)
+                    if(queue.size > 0) queue.clear()
                     trackEndEventCalled = false
                 }
             }
