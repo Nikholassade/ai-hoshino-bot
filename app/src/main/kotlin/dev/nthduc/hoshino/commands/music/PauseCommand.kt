@@ -27,5 +27,5 @@ class PauseCommand(private val lavalink: LavaKord) : Command {
     }
 
     override val description: String
-        get() = "Pause playing track"
+        get() = "Tạm dừng bài hát hiện tại"
 }

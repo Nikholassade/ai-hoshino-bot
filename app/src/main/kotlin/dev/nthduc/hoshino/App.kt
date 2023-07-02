@@ -59,6 +59,7 @@ suspend fun main() {
         commandHandler.registerCommand("connect", ConnectCommand(lavalink))
         commandHandler.registerCommand("skip", SkipCommand(lavalink))
         commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
+        commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
         commandHandler.registerCommand("serverinfo", ServerInfoCommand())
 

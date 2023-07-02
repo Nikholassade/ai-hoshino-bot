@@ -75,6 +75,7 @@ dependencies {
 //    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.7")
 
     implementation("com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.4")
+    implementation("org.json:json:20230227")
 
 
 }

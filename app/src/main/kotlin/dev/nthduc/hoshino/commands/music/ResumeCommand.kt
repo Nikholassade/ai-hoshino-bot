@@ -17,5 +17,5 @@ class ResumeCommand(private val lavalink: LavaKord) : Command {
     }
 
     override val description: String
-        get() = "Resume playing track"
+        get() = "Tiếp tục phát nhạc"
 }
