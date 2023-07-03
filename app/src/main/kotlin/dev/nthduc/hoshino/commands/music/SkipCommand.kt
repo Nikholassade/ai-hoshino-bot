@@ -20,5 +20,5 @@ class SkipCommand(private val lavalink: LavaKord) : Command {
         }
     }
     override val description: String
-        get() = "Skipped current track"
+        get() = "Bỏ qua bài hát hiện tại "
 }
