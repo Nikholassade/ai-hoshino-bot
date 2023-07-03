@@ -13,16 +13,16 @@ import io.ktor.client.request.*
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
-class SmugCommand : Command {
+class FeedCommand : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
         val mentionedUser = message.getUserMention()?.asUser()?.mention ?: message.author?.asUser()?.mention
         if (mentionedUser != null) {
-            val response: NekosLifeResponse = client.get("https://nekos.life/api/v2/img/smug").body()
+            val response: NekosLifeResponse = client.get("https://nekos.life/api/v2/img/feed").body()
             val imageUrl = response.url
 
             message.channel.createMessage {
-                content = "HHHHH ${Emojis.hugging} ${message.author?.mention} đã tỏ vẻ với $mentionedUser !"
+                content = "MĂMMMMMM ${Emojis.hamburger} ${message.author?.mention} đã cho $mentionedUser ăn !"
                 embed {
                     author {
                         name = "Yêu cầu bởi ${message.author?.username}"
@@ -45,5 +45,5 @@ class SmugCommand : Command {
     }
 
     override val description: String
-        get() = "Tự mãn với một ai đó"
+        get() = "Cho một ai đó ăn"
 }

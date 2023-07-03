@@ -68,6 +68,8 @@ suspend fun main() {
         commandHandler.registerCommand("cuddle", CuddleCommand())
         commandHandler.registerCommand("slap", SlapCommand())
         commandHandler.registerCommand("pat", PatCommand())
+        commandHandler.registerCommand("smug", SmugCommand())
+        commandHandler.registerCommand("feed", FeedCommand())
 
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
