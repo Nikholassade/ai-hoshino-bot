@@ -8,6 +8,7 @@ import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.nthduc.hoshino.commands.*
+import dev.nthduc.hoshino.commands.anime.CuddleCommand
 import dev.nthduc.hoshino.commands.anime.HugCommand
 import dev.nthduc.hoshino.commands.anime.KissCommand
 import dev.nthduc.hoshino.commands.music.*
@@ -66,6 +67,7 @@ suspend fun main() {
         commandHandler.registerCommand("serverinfo", ServerInfoCommand())
         commandHandler.registerCommand("kiss", KissCommand())
         commandHandler.registerCommand("hug", HugCommand())
+        commandHandler.registerCommand("cuddle", CuddleCommand())
 
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
