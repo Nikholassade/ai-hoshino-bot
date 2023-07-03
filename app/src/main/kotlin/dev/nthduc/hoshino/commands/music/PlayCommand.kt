@@ -171,5 +171,5 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
 //     }
 
     override val description: String
-        get() = "Play a song from Youtube, Soundcloud, Spotify"
+        get() = "Phát nhạc từ Youtube, Soundcloud, Spotify"
 }

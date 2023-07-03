@@ -9,7 +9,7 @@ class NowPlayingCommand(private val lavalink: LavaKord) : Command {
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
         val track = link.player.playingTrack
         if (track != null) {
-            event.message.channel.createMessage("Bài hát đang phát: ${track.title}")
+            event.message.channel.createMessage("Bài hát đang phát: ***${track.title}***")
         } else {
             event.message.channel.createMessage("Không có bài hát nào đang phát")
         }
