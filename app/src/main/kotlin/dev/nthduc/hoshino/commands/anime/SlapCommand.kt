@@ -1,5 +1,4 @@
 package dev.nthduc.hoshino.commands.anime
-
 import dev.kord.common.Color
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.behavior.channel.createMessage
@@ -14,25 +13,23 @@ import io.ktor.client.request.*
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
-
-class CuddleCommand : Command {
+class SlapCommand : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
         val mentionedUser = message.getUserMention()?.asUser()?.mention ?: message.author?.asUser()?.mention
         if (mentionedUser != null) {
-            val response: NekosLifeResponse = client.get("https://nekos.life/api/v2/img/cuddle").body()
+            val response: NekosLifeResponse = client.get("https://nekos.life/api/v2/img/slap").body()
             val imageUrl = response.url
 
             message.channel.createMessage {
-                content =
-                    "SHEEESHHHHH ${Emojis.hugging} ${message.author?.mention} đã ôm ấp $mentionedUser !"
+                content = "GRRRRRR ${Emojis.facepalm} ${message.author?.mention} đã tát $mentionedUser một bạt tai!"
                 embed {
                     author {
                         name = "Yêu cầu bởi ${message.author?.username}"
                         icon = message.author?.avatar?.cdnUrl?.toUrl()
                     }
                     image = imageUrl
-                    color = Color(49, 14, 76)
+                    color = Color(49,14,76)
                     footer {
                         text = "Bot được phát triển bởi ${runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.username.toString()}"
                         icon = runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.avatar?.cdnUrl?.toUrl()
@@ -48,5 +45,5 @@ class CuddleCommand : Command {
     }
 
     override val description: String
-        get() = "Ôm ấp một ai đó nhẹ nhàng"
+        get() = "Tát một ai đó"
 }

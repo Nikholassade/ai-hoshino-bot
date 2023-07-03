@@ -11,6 +11,7 @@ import dev.nthduc.hoshino.commands.*
 import dev.nthduc.hoshino.commands.anime.CuddleCommand
 import dev.nthduc.hoshino.commands.anime.HugCommand
 import dev.nthduc.hoshino.commands.anime.KissCommand
+import dev.nthduc.hoshino.commands.anime.SlapCommand
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
@@ -68,6 +69,7 @@ suspend fun main() {
         commandHandler.registerCommand("kiss", KissCommand())
         commandHandler.registerCommand("hug", HugCommand())
         commandHandler.registerCommand("cuddle", CuddleCommand())
+        commandHandler.registerCommand("slap", SlapCommand())
 
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
