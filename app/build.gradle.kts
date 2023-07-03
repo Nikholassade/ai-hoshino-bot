@@ -5,12 +5,13 @@
  * For more details take a look at the 'Building Java & JVM projects' chapter in the Gradle
  * User Manual available at https://docs.gradle.org/8.1.1/userguide/building_java_projects.html
  */
-
+val ktor_version: String by project
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.ktor.plugin") version "2.3.1"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -19,6 +20,8 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    jcenter()
+    maven("https://maven.pkg.jetbrains.space/kordlib/maven")
 
     // Add the 'https://m2.dv8tion.net/releases' repository
     maven {
@@ -63,19 +66,23 @@ dependencies {
 
     implementation("dev.schlaubi.lavakord:kord:4.1.0")
     // List of artifacts, e.g.:
-    implementation("io.ktor:ktor-server-core-jvm:2.3.1")
-    implementation("io.ktor:ktor-server-netty-jvm:2.3.1")
-    implementation("io.ktor:ktor-server-status-pages-jvm:2.3.1")
-    implementation("io.ktor:ktor-server-default-headers-jvm:2.3.1")
-    implementation("io.ktor:ktor-server-cors:2.3.1")
-    implementation("io.ktor:ktor-client-core:2.3.1")
-    implementation("io.ktor:ktor-client-json:2.3.1")
-    implementation("io.ktor:ktor-client-gson:2.3.1")
-    implementation("io.ktor:ktor-client-apache:2.3.1")
+    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-default-headers-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-json:$ktor_version")
+    implementation("io.ktor:ktor-client-gson:$ktor_version")
+    implementation("io.ktor:ktor-client-apache:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization:$ktor_version")
+
+
 //    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.7")
 
     implementation("com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.4")
     implementation("org.json:json:20230227")
+    implementation("dev.kord.x:emoji:0.5.0")
 
 
 }

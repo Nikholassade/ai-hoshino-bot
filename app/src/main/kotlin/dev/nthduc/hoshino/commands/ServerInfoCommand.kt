@@ -88,44 +88,29 @@ class ServerInfoCommand() : Command {
                         true
                 }
                 field {
-                    name =
-                        "Channels"
-                    value =
-                        "$textChannels text / $voiceChannels voice"
-                    inline =
-                        true
+                    name = "Channels"
+                    value = "$textChannels text / $voiceChannels voice"
+                    inline = true
                 }
                 field {
-                    name =
-                        "Members"
-                    value =
-                        members
-                    inline =
-                        true
+                    name = "Members"
+                    value = members
+                    inline = true
                 }
                 field {
-                    name =
-                        "Verification Level"
-                    value =
-                        verificationLevelName
-                    inline =
-                        true
+                    name = "Verification Level"
+                    value = verificationLevelName
+                    inline = true
                 }
                 field {
-                    name =
-                        "Server Created"
-                    value =
-                        "$years years, $months months, $days days ago"
-                    inline =
-                        true
+                    name = "Server Created"
+                    value = "$years years, $months months, $days days ago"
+                    inline = true
                 }
                 field {
-                    name =
-                        "Roles"
-                    value =
-                        roles.takeIf { it.isNotBlank() } ?: "None"
-                    inline =
-                        true
+                    name = "Roles"
+                    value = roles.takeIf { it.isNotBlank() } ?: "None"
+                    inline = true
                 }
             }
         }
