@@ -20,7 +20,6 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
-    jcenter()
     maven("https://maven.pkg.jetbrains.space/kordlib/maven")
 
     // Add the 'https://m2.dv8tion.net/releases' repository
