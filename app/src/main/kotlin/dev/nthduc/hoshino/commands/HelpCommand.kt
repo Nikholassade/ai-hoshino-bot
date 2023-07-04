@@ -21,8 +21,8 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
             size = Image.Size.Size512
         } ?: ""
         message.channel.createEmbed {
-            title = "Available Commands"
-            description = "This is a list of all available commands for the bot."
+            title = "Các lệnh có sẵn"
+            description = "Đây là danh sách tất cả các lệnh có sẵn cho bot."
             for ((name, command) in commands) {
                 field {
                     this.name = "!$name"
@@ -52,14 +52,14 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
         } ?: ""
         commandInteraction.respondPublic {
             embed {
-                title = "Available Commands"
+                title = "Các lệnh có sẵn"
                 for ((name, command) in commands) {
                     field {
                         this.name = "!$name"
                         value = command.description
                     }
                 }
-                description = "This is a list of all available commands for the bot."
+                description = "Đây là danh sách tất cả các lệnh có sẵn cho bot."
                 color = Color(49,14,76)
                 thumbnail {
                     url = avatarUrl
@@ -74,5 +74,5 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
     }
 
     override val description: String
-        get() = "Displays a list of available commands."
+        get() = "Hiển thị danh sách các lệnh có sẵn."
 }

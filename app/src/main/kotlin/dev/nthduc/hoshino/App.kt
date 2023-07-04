@@ -97,7 +97,7 @@ suspend fun main() {
         }
 
         client.login {
-            presence { playing("Oshi no Ko") }
+            presence { watching("Oshi no Ko") }
 
 
             @OptIn(PrivilegedIntent::class)
