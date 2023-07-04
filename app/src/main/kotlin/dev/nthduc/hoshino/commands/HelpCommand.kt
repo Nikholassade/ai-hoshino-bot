@@ -74,5 +74,5 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
     }
 
     override val description: String
-        get() = "Displays a list of available commands."
+        get() = "Hiển thị danh sách các lệnh có sẵn."
 }
