@@ -6,6 +6,7 @@ import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.component.ActionRowBuilder
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.nthduc.hoshino.commands.music.PlayCommand
 import dev.nthduc.hoshino.commands.music.TrackPlayer
 import dev.nthduc.hoshino.commands.music.queue
 import dev.schlaubi.lavakord.audio.Link
@@ -14,6 +15,7 @@ import kotlinx.coroutines.launch
 class ButtonHandler(private val link: Link,
                     private val trackPlayer: TrackPlayer,
                     private val event: MessageCreateEvent,
+                    private val playCommand: PlayCommand
 ) {
     suspend fun handleButtonInteraction(interaction: ButtonInteractionCreateEvent, embed: EmbedBuilder) {
         when (interaction.interaction.componentId) {
@@ -78,6 +80,7 @@ class ButtonHandler(private val link: Link,
                             content = "Đã bỏ qua bài hát hiện tại"
                         }
                     }
+                    playCommand.trackEndEventCalled = false
                 }
             }
         }

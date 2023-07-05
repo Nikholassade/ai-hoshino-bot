@@ -52,12 +52,12 @@ class ServerInfoCommand() : Command {
         val textChannels = channels.count { it.type == ChannelType.GuildText }
         val voiceChannels = channels.count { it.type == ChannelType.GuildVoice }
         val verificationLevelName = when (guild.verificationLevel) {
-            VerificationLevel.None -> "None"
-            VerificationLevel.Low -> "Low"
-            VerificationLevel.Medium -> "Medium"
-            VerificationLevel.High -> "High"
-            VerificationLevel.VeryHigh -> "Very High"
-            else -> "Unknown"
+            VerificationLevel.None -> "Không có"
+            VerificationLevel.Low -> "Thấp"
+            VerificationLevel.Medium -> "Trung bình"
+            VerificationLevel.High -> "Cao"
+            VerificationLevel.VeryHigh -> "Rất cao"
+            else -> "Không xác định"
         }
         val members = guild.data.memberCount.value.toString()
         val now = Clock.System.now()
@@ -73,56 +73,57 @@ class ServerInfoCommand() : Command {
                     name = guild.name
                     icon = guild.icon?.cdnUrl?.toUrl { format = Image.Format.PNG } ?: ""
                 }
-                title = guild.name
+                title = "Thông tin máy chủ"
                 color = Color(49, 14, 76)
                 thumbnail {
                     url = guild.icon?.cdnUrl?.toUrl { format = Image.Format.PNG } ?: ""
                 }
                 field {
-                    name = "Server ID"
+                    name = "ID Máy chủ"
                     value = guild.id.toString()
                     inline = true
                 }
                 field {
-                    name = "Server Owner"
+                    name = "Chủ sở hữu"
                     value =
                         guild.owner.asUser().mention
                     inline =
                         true
                 }
                 field {
-                    name = "Channels"
+                    name = "Kênh"
                     value = "$textChannels text / $voiceChannels voice"
                     inline = true
                 }
                 field {
-                    name = "Members"
+                    name = "Thành viên"
                     value = members
                     inline = true
                 }
                 field {
-                    name = "Verification Level"
+                    name = "Cấp độ xác minh"
                     value = verificationLevelName
                     inline = true
                 }
                 field {
-                    name = "Server Created"
-                    value = "$years years, $months months, $days days ago"
+                    name = "Máy chủ được tạo"
+                    value = "$years năm, $months tháng, $days ngày trước"
                     inline = true
                 }
                 field {
-                    name = "Roles"
-                    value = roles.takeIf { it.isNotBlank() } ?: "None"
+                    name = "Vai trò"
+                    value = roles.takeIf { it.isNotBlank() } ?: "Không có"
                     inline = true
                 }
                 footer {
                     text = "Bot được phát triển bởi $userOwner"
                     icon = "$avatarOwner"
                 }
+                timestamp = Clock.System.now()
             }
         }
     }
 
     override val description: String
-        get() = "Hiển thị thông tin về Server"
+        get() = "Hiện thị thông tin về Server"
 }

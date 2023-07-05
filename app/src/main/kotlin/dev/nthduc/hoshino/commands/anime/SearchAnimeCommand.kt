@@ -1,15 +1,14 @@
 package dev.nthduc.hoshino.commands.anime
 
 import dev.kord.common.Color
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.entity.Message
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.create.embed
 import dev.nthduc.hoshino.commands.Command
+import dev.nthduc.hoshino.utils.getOwnerInfo
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 @Serializable
@@ -48,6 +47,7 @@ data class AnilistTitle(
 class SearchAnimeCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
+        val (userOwner, avatarOwner) = getOwnerInfo(event)
         val imageUrl = message.getImageUrl()
         if (imageUrl != null) {
             val response: HttpResponse = client.get("https://api.trace.moe/search?anilistInfo") {
@@ -99,8 +99,8 @@ class SearchAnimeCommand() : Command {
                             url = result.image
                         }
                         footer {
-                            text = "Bot được phát triển bởi ${runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.username.toString()}"
-                            icon = runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.avatar?.cdnUrl?.toUrl()
+                            text = "Bot được phát triển bởi $userOwner"
+                            icon = "$avatarOwner"
                         }
                         timestamp = Clock.System.now()
                     }
