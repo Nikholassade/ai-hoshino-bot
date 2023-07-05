@@ -1,11 +1,10 @@
 package dev.nthduc.hoshino.embeds
 
 import dev.kord.common.Color
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.EmbedBuilder
+import dev.nthduc.hoshino.utils.getOwnerInfo
 import dev.schlaubi.lavakord.rest.models.PartialTrack
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 import java.time.Duration
 
@@ -17,10 +16,7 @@ class TrackEmbed(track: PartialTrack, event: MessageCreateEvent) {
         val durationText = "%02d:%02d".format(duration.toMinutes(), duration.seconds % 60)
         val videoId = track.info.uri.split("=").last()
         val thumbnailUrl = "https://img.youtube.com/vi/$videoId/maxresdefault.jpg"
-        val userId = 681140407765172232
-        val user = runBlocking { event.kord.getUser(Snowflake(userId)) }
-        val userOwner = user?.username
-        val avatarOwner = user?.avatar?.cdnUrl?.toUrl()
+        val (userOwner, avatarOwner) = getOwnerInfo(event)
 
 
         embed.title = "Đang phát"

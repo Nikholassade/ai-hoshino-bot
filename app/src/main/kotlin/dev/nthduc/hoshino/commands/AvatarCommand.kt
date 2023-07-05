@@ -12,6 +12,7 @@ import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.Image
 import dev.kord.rest.builder.message.create.embed
+import dev.nthduc.hoshino.utils.getOwnerInfo
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.datetime.Clock
 
@@ -19,6 +20,7 @@ import kotlinx.datetime.Clock
 class AvatarCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
+        val (userOwner, avatarOwner) = getOwnerInfo(event)
         val mentionedUser = message.getUserMention()?.asUser() ?: message.author?.asUser()
         if (mentionedUser != null) {
             val avatarUrl = mentionedUser.avatar?.cdnUrl?.toUrl {
@@ -30,12 +32,12 @@ class AvatarCommand() : Command {
                 url = avatarUrl
                 image = avatarUrl
                 footer {
-                    text = "Requested by ${message.author?.username}"
-                    icon = message.author?.avatar?.cdnUrl?.toUrl()
+                    text = "Bot được phát triển bởi $userOwner"
+                    icon = "$avatarOwner"
                 }
                 author {
-                    name = mentionedUser.username
-                    icon = avatarUrl
+                    name = "${message.author?.username}"
+                    icon = message.author?.avatar?.cdnUrl?.toUrl()
                 }
                 color = Color(49,14,76)
                 timestamp = Clock.System.now()
@@ -55,6 +57,7 @@ class AvatarCommand() : Command {
             format = Image.Format.PNG
             size = Image.Size.Size512
         }
+        val (userOwner, avatarOwner) = getOwnerInfo(interaction)
         // Check if the user has provided a user ID or @mention.
         if (userOption == null) {
             commandInteraction.respondPublic {
@@ -74,12 +77,12 @@ class AvatarCommand() : Command {
                 url = avatarUrl
                 image = avatarUrl
                 footer {
-                    text = "Requested by ${commandInteraction.user.username}"
-                    icon = commandInteraction.user.avatar?.cdnUrl?.toUrl()
+                    text = "Bot được phát triển bởi $userOwner"
+                    icon = "$avatarOwner"
                 }
                 author {
-                    name = user.username
-                    icon = avatarUrl
+                    name = commandInteraction.user.username
+                    icon = commandInteraction.user.avatar?.cdnUrl?.toUrl()
                 }
                 color = Color(49,14,76)
                 timestamp = Clock.System.now()

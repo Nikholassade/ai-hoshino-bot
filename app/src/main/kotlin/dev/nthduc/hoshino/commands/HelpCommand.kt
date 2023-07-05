@@ -8,6 +8,7 @@ import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.Image
 import dev.kord.rest.builder.message.create.embed
+import dev.nthduc.hoshino.utils.getOwnerInfo
 import kotlinx.datetime.Clock
 
 class HelpCommand(private val commands: Map<String, Command>) : Command {
@@ -20,6 +21,7 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
             format = Image.Format.PNG
             size = Image.Size.Size512
         } ?: ""
+        val (userOwner, avatarOwner) = getOwnerInfo(event)
         message.channel.createEmbed {
             title = "Các lệnh có sẵn"
             description = "Đây là danh sách tất cả các lệnh có sẵn cho bot."
@@ -29,13 +31,17 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
                     value = command.description
                 }
             }
+            author {
+                name ="${message.author?.username}"
+                icon = message.author?.avatar?.cdnUrl?.toUrl()
+            }
             color = Color(49,14,76)
             thumbnail {
                 url = avatarUrl
             }
             footer {
-                text = "Requested by ${message.author?.username}"
-                icon = message.author?.avatar?.cdnUrl?.toUrl()
+                text = "Bot được phát triển bởi $userOwner"
+                icon = "$avatarOwner"
             }
             timestamp = Clock.System.now()
         }
@@ -50,6 +56,7 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
             format = Image.Format.PNG
             size = Image.Size.Size512
         } ?: ""
+        val (userOwner, avatarOwner) = getOwnerInfo(interaction)
         commandInteraction.respondPublic {
             embed {
                 title = "Các lệnh có sẵn"
@@ -61,12 +68,16 @@ class HelpCommand(private val commands: Map<String, Command>) : Command {
                 }
                 description = "Đây là danh sách tất cả các lệnh có sẵn cho bot."
                 color = Color(49,14,76)
+                author {
+                    name = "Requested by ${user.username}"
+                    icon = user.avatar?.cdnUrl?.toUrl()
+                }
                 thumbnail {
                     url = avatarUrl
                 }
                 footer {
-                    text = "Requested by ${user.username}"
-                    icon = user.avatar?.cdnUrl?.toUrl()
+                    text = "Bot được phát triển bởi $userOwner"
+                    icon = "$avatarOwner"
                 }
                 timestamp = Clock.System.now()
             }

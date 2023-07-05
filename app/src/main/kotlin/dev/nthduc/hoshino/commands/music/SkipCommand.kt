@@ -16,7 +16,7 @@ class SkipCommand(private val lavalink: LavaKord) : Command {
             }
             event.message.channel.createMessage("Skipped current track")
         } else {
-            event.message.channel.createMessage("Cannot skip the last track in the playlist")
+            event.message.channel.createMessage("Không thể bỏ qua bài hát cuối cùng trong danh sách phát")
         }
     }
     override val description: String

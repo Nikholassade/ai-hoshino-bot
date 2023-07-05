@@ -12,6 +12,7 @@ import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.Image
 import dev.kord.rest.builder.message.create.embed
+import dev.nthduc.hoshino.utils.getOwnerInfo
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -21,12 +22,14 @@ class ServerInfoCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
         val guild = message.getGuild()
-        sendServerInfo(guild, message.channelId)
+        val (userOwner, avatarOwner) = getOwnerInfo(event)
+        sendServerInfo(guild, message.channelId,userOwner,avatarOwner)
     }
 
     suspend fun execute(interaction: Interaction) {
         val commandInteraction =
             interaction as ApplicationCommandInteraction
+        val (userOwner, avatarOwner) = getOwnerInfo(interaction)
         val guild =
             commandInteraction.data.guildId.value?.let { interaction.kord.getGuildOrNull(it) } ?: return
         interaction.kord.launch {
@@ -34,12 +37,12 @@ class ServerInfoCommand() : Command {
                 content = "Đang lấy thông tin máy chủ..."
             }
 
-            sendServerInfo(guild, commandInteraction.channelId)
+            sendServerInfo(guild, commandInteraction.channelId, userOwner,avatarOwner)
         }
     }
 
 
-    private suspend fun sendServerInfo(guild: Guild, channelId: Snowflake) {
+    private suspend fun sendServerInfo(guild: Guild, channelId: Snowflake, userOwner: String?, avatarOwner: String? ) {
         val roles = guild.kord.rest.guild.getGuildRoles(guild.id)
             .filterNot { it.name == "@everyone" }
             .take(20)
@@ -111,6 +114,10 @@ class ServerInfoCommand() : Command {
                     name = "Roles"
                     value = roles.takeIf { it.isNotBlank() } ?: "None"
                     inline = true
+                }
+                footer {
+                    text = "Bot được phát triển bởi $userOwner"
+                    icon = "$avatarOwner"
                 }
             }
         }
