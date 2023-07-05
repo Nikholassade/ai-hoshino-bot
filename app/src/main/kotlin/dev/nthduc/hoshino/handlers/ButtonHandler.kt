@@ -80,7 +80,6 @@ class ButtonHandler(private val link: Link,
                             content = "Đã bỏ qua bài hát hiện tại"
                         }
                     }
-                    playCommand.trackEndEventCalled = false
                 }
             }
         }

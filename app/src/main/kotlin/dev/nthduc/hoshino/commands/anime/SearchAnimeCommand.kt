@@ -5,6 +5,7 @@ import dev.kord.core.entity.Message
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.builder.message.create.embed
 import dev.nthduc.hoshino.commands.Command
+import dev.nthduc.hoshino.utils.client
 import dev.nthduc.hoshino.utils.getOwnerInfo
 import io.ktor.client.call.*
 import io.ktor.client.request.*
