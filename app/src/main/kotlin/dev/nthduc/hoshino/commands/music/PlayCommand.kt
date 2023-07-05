@@ -1,7 +1,6 @@
 package dev.nthduc.hoshino.commands.music
 
 import dev.kord.common.Color
-import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.behavior.channel.createEmbed
 import dev.kord.core.event.interaction.ButtonInteractionCreateEvent
@@ -11,6 +10,7 @@ import dev.kord.core.on
 import dev.nthduc.hoshino.commands.Command
 import dev.nthduc.hoshino.embeds.TrackEmbed
 import dev.nthduc.hoshino.handlers.ButtonHandler
+import dev.nthduc.hoshino.utils.getOwnerInfo
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Event
 import dev.schlaubi.lavakord.audio.Link
@@ -21,7 +21,6 @@ import dev.schlaubi.lavakord.rest.models.PartialTrack
 import dev.schlaubi.lavakord.rest.models.TrackResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.Clock
 
 
@@ -41,7 +40,7 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
         } else {
             "ytsearch:$query"
         }
-
+        val (userOwner, avatarOwner) = getOwnerInfo(event)
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
 
         link.player.on<Event, TrackEndEvent> {
@@ -104,8 +103,8 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                     color = Color(49,14,76)
                     timestamp = Clock.System.now()
                     footer {
-                        text = "Bot được phát triển bởi ${runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.username.toString()}"
-                        icon = runBlocking { event.kord.getUser(Snowflake(681140407765172232)) }?.avatar?.cdnUrl?.toUrl()
+                        text = "Bot được phát triển bởi $userOwner"
+                        icon = "$avatarOwner"
                     }
                 }
             }

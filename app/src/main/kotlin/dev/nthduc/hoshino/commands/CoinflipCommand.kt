@@ -10,15 +10,15 @@ class CoinflipCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
         val random = Random()
-        val result = if (random.nextBoolean()) "heads" else "tails"
-        message.channel.createMessage("The coin landed on `$result`!")
+        val result = if (random.nextBoolean()) "mặt sấp" else "mặt ngửa"
+        message.channel.createMessage("Đồng xu rơi vào `$result`!")
     }
 
     suspend fun execute(interaction: Interaction) {
         val commandInteraction = interaction as ApplicationCommandInteraction
         val random = Random()
-        val result = if (random.nextBoolean()) "heads" else "tails"
-        val response = "The coin landed on `$result`!"
+        val result = if (random.nextBoolean()) "mặt sấp" else "mặt ngửa"
+        val response = "Đồng xu rơi vào `$result`!"
         commandInteraction.respondPublic {
             content = response
         }

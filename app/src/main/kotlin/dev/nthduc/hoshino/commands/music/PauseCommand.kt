@@ -13,7 +13,7 @@ class PauseCommand(private val lavalink: LavaKord) : Command {
             link.player.pause()
             event.message.channel.createMessage("Đã tạm dừng phát nhạc !")
         } else {
-            event.message.channel.createMessage("Not currently playing a track")
+            event.message.channel.createMessage("Hiện tại không phát bài hát nào")
         }
     }
     suspend fun execute(event: ButtonInteractionCreateEvent) {
@@ -22,7 +22,7 @@ class PauseCommand(private val lavalink: LavaKord) : Command {
             link.player.pause()
             event.interaction.channel.createMessage("Đã tạm dừng phát nhạc !")
         } else {
-            event.interaction.channel.createMessage("Not currently playing a track")
+            event.interaction.channel.createMessage("Hiện tại không phát bài hát nào")
         }
     }
 
