@@ -27,7 +27,7 @@ import kotlinx.datetime.Clock
 val queue = mutableListOf<PartialTrack>()
 class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Command {
 
-    private var trackEndEventCalled = false
+    var trackEndEventCalled = false
     override suspend fun execute(event: MessageCreateEvent) {
         val args = event.message.content.split(" ")
         val query = args.drop(1).joinToString(" ")
@@ -118,9 +118,16 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
       private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
           val trackPlayer = TrackPlayer(link)
           trackPlayer.playNextTrack(queue,event,true)
-          val buttonHandler = ButtonHandler(link,trackPlayer,event)
-          val embed = TrackEmbed(trackPlayer.nextTrack!!, event).build()
-              kord.on<ButtonInteractionCreateEvent> { buttonHandler.handleButtonInteraction(this, embed) }
+          val buttonHandler = ButtonHandler(link,trackPlayer,event,this)
+          if (trackPlayer.nextTrack != null) {
+              val embed = TrackEmbed(trackPlayer.nextTrack, event).build()
+
+              kord.on<ButtonInteractionCreateEvent> {
+                  buttonHandler.handleButtonInteraction(this, embed)
+              }
+          } else {
+              event.message.channel.createMessage("Không còn bài hát tiếp theo trong hàng đợi.")
+          }
         }
 
 
