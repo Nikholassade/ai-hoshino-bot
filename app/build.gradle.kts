@@ -6,6 +6,7 @@
  * User Manual available at https://docs.gradle.org/8.1.1/userguide/building_java_projects.html
  */
 val ktor_version: String by project
+val saucenaoapi_version: String by project
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
@@ -18,6 +19,7 @@ plugins {
 }
 
 repositories {
+    google()
     // Use Maven Central for resolving dependencies.
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/kordlib/maven")
@@ -77,11 +79,12 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
 
 
-//    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.7")
+//    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.8-SNAPSHOT")
 
     implementation("com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.4")
     implementation("org.json:json:20230227")
     implementation("dev.kord.x:emoji:0.5.0")
+    implementation("dev.inmo:saucenaoapi:$saucenaoapi_version")
 
 
 }
