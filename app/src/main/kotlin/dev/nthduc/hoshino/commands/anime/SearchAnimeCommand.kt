@@ -57,6 +57,7 @@ class SearchAnimeCommand() : Command {
             val traceMoeResponse = response.body<TraceMoeResponse>()
             if (traceMoeResponse.result.isNotEmpty()) {
                 val result = traceMoeResponse.result[0]
+                println(result.anilist)
 
                 event.kord.rest.channel.createMessage(event.message.channelId) {
                     content = "Tôi đã tìm thấy một kết quả phù hợp!"
@@ -72,7 +73,7 @@ class SearchAnimeCommand() : Command {
                         }
                         field {
                             name = "Tên phim"
-                            value = result.anilist.title.english.toString()
+                            value = result.anilist.title.english ?: result.anilist.title.romaji.toString()
                         }
                         field {
                             name = "Tập"
