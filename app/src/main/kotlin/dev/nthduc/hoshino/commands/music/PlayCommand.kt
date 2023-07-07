@@ -48,7 +48,6 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                 trackEndEventCalled = true
                 kord.launch {
                     playNextTrack(link,event)
-                    if(queue.size > 0) queue.clear()
                     trackEndEventCalled = false
                 }
             }
@@ -72,6 +71,7 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
                     delay(1000)
                     if (link.player.playingTrack == null) {
                         if (System.currentTimeMillis() - lastPlayed > 60000) {
+                            if(queue.size > 0) queue.clear()
                             link.destroy()
                             break
                         }
@@ -115,7 +115,7 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
             )
         }
     }
-      private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
+       private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
           val trackPlayer = TrackPlayer(link)
           trackPlayer.playNextTrack(queue,event,true)
           val buttonHandler = ButtonHandler(link,trackPlayer,event,this)
