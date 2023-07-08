@@ -36,6 +36,10 @@ repositories {
         name = "Sonatype Snapshots"
         url = uri("https://oss.sonatype.org/content/repositories/snapshots")
     }
+    maven {
+        name = "Sonatype Snapshots"
+        url = uri("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    }
     maven { url = uri("https://jitpack.io") }
     maven {
         url = uri("https://repo.maven.apache.org/maven2/")
@@ -79,7 +83,7 @@ dependencies {
     implementation("io.ktor:ktor-client-serialization:$ktor_version")
 
 
-//    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.8-SNAPSHOT")
+    implementation("com.kotlindiscord.kord.extensions:kord-extensions:1.5.8-SNAPSHOT")
 
     implementation("com.github.TopiSenpai.LavaSrc:lavasrc-plugin:3.2.4")
     implementation("org.json:json:20230227")

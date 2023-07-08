@@ -1,5 +1,6 @@
 package dev.nthduc.hoshino
 
+import com.kotlindiscord.kord.extensions.ExtensibleBot
 import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
@@ -10,6 +11,7 @@ import dev.kord.gateway.PrivilegedIntent
 import dev.nthduc.hoshino.commands.*
 import dev.nthduc.hoshino.commands.anime.*
 import dev.nthduc.hoshino.commands.music.*
+import dev.nthduc.hoshino.extensions.AvatarExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -77,19 +79,25 @@ suspend fun main() {
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
         val helloCommand = HelloCommand()
         val coinflipCommand = CoinflipCommand()
-        val avatarCommand = AvatarCommand()
         val helpCommand = HelpCommand(commandHandler.commands)
         val serverInfoCommand = ServerInfoCommand()
 
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
         slashCommandHandler.registerCommand("coinflip", "Flip a coin", coinflipCommand::execute)
-        slashCommandHandler.registerCommand("avatar", "Get Avatar", avatarCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
         slashCommandHandler.registerCommand("serverinfo", "Hiển thị thông tin về Server", serverInfoCommand::execute)
 
 
         slashCommandHandler.listen()
         // Đăng ký các lệnh khác với commandHandler
+        val bot = ExtensibleBot(token) {
+            extensions {
+                add(::AvatarExtension)
+            }
+        }
+        bot.start()
+
+
 
         client.on<MessageCreateEvent> {
             logger.debug("Received message: ${message.content}")
