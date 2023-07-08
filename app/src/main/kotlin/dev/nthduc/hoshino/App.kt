@@ -12,6 +12,7 @@ import dev.nthduc.hoshino.commands.*
 import dev.nthduc.hoshino.commands.anime.*
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.extensions.AvatarExtension
+import dev.nthduc.hoshino.extensions.CoinflipExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -89,14 +90,6 @@ suspend fun main() {
 
 
         slashCommandHandler.listen()
-        // Đăng ký các lệnh khác với commandHandler
-        val bot = ExtensibleBot(token) {
-            extensions {
-                add(::AvatarExtension)
-            }
-        }
-        bot.start()
-
 
 
         client.on<MessageCreateEvent> {
@@ -122,6 +115,14 @@ suspend fun main() {
             intents += Intent.DirectMessages
             intents += Intent.GuildWebhooks
         }
+
+        val bot = ExtensibleBot(token) {
+            extensions {
+                add(::AvatarExtension)
+                add(::CoinflipExtension)
+            }
+        }
+        bot.start()
 
     }
 }
