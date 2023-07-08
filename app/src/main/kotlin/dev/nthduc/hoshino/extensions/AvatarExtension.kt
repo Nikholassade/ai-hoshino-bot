@@ -39,9 +39,6 @@ class AvatarExtension : Extension() {
                         }}) | [WEBP](${user.avatar?.cdnUrl?.toUrl{
                             format = Image.Format.WEBP
                             size = Image.Size.Size512
-                        }}) | [LOTTIE](${user.avatar?.cdnUrl?.toUrl{
-                            format = Image.Format.LOTTIE
-                            size = Image.Size.Size512
                         }})"
                         image = user.avatar?.cdnUrl?.toUrl{
                             format = Image.Format.PNG

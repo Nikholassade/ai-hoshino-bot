@@ -90,15 +90,6 @@ suspend fun main() {
 
 
         slashCommandHandler.listen()
-        // Đăng ký các lệnh khác với commandHandler
-        val bot = ExtensibleBot(token) {
-            extensions {
-                add(::AvatarExtension)
-                add(::CoinflipExtension)
-            }
-        }
-        bot.start()
-
 
 
         client.on<MessageCreateEvent> {
@@ -124,6 +115,14 @@ suspend fun main() {
             intents += Intent.DirectMessages
             intents += Intent.GuildWebhooks
         }
+
+        val bot = ExtensibleBot(token) {
+            extensions {
+                add(::AvatarExtension)
+                add(::CoinflipExtension)
+            }
+        }
+        bot.start()
 
     }
 }

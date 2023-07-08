@@ -32,9 +32,6 @@ class AvatarCommand() : Command {
                 }}) | [WEBP](${mentionedUser.avatar?.cdnUrl?.toUrl{
                     format = Image.Format.WEBP
                     size = Image.Size.Size512
-                }}) | [LOTTIE](${mentionedUser.avatar?.cdnUrl?.toUrl{
-                    format = Image.Format.LOTTIE
-                    size = Image.Size.Size512
                 }})"
                 image = mentionedUser.avatar?.cdnUrl?.toUrl{
                     format = Image.Format.PNG
