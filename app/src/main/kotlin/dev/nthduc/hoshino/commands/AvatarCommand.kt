@@ -1,17 +1,11 @@
 package dev.nthduc.hoshino.commands
 
 import dev.kord.common.Color
-import dev.kord.common.entity.Snowflake
-import dev.kord.common.entity.optional.firstOrNull
 import dev.kord.core.behavior.channel.createEmbed
-import dev.kord.core.behavior.interaction.respondPublic
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.User
-import dev.kord.core.entity.interaction.ApplicationCommandInteraction
-import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.rest.Image
-import dev.kord.rest.builder.message.create.embed
 import dev.nthduc.hoshino.utils.getOwnerInfo
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.datetime.Clock
@@ -29,6 +23,23 @@ class AvatarCommand() : Command {
             }
             message.channel.createEmbed {
                 title = "Avatar ${mentionedUser.username}"
+                description = "[JPEG](${mentionedUser.avatar?.cdnUrl?.toUrl{
+                    format = Image.Format.JPEG
+                    size = Image.Size.Size512
+                }}) | [PNG](${mentionedUser.avatar?.cdnUrl?.toUrl{
+                    format = Image.Format.PNG
+                    size = Image.Size.Size512
+                }}) | [WEBP](${mentionedUser.avatar?.cdnUrl?.toUrl{
+                    format = Image.Format.WEBP
+                    size = Image.Size.Size512
+                }}) | [LOTTIE](${mentionedUser.avatar?.cdnUrl?.toUrl{
+                    format = Image.Format.LOTTIE
+                    size = Image.Size.Size512
+                }})"
+                image = mentionedUser.avatar?.cdnUrl?.toUrl{
+                    format = Image.Format.PNG
+                    size = Image.Size.Size512
+                }
                 url = avatarUrl
                 image = avatarUrl
                 footer {
@@ -44,56 +55,10 @@ class AvatarCommand() : Command {
             }
         }
     }
-
-    suspend fun execute(interaction: Interaction) {
-        val commandInteraction = interaction as ApplicationCommandInteraction
-        val userOption = commandInteraction.data.data.options.firstOrNull { it.name == "user" }?.value as? String
-        val user = if (userOption != null) {
-            interaction.kord.getUser(Snowflake(userOption)) ?: return
-        } else {
-            commandInteraction.user.asUser()
-        }
-        val avatarUrl = user.avatar?.cdnUrl?.toUrl {
-            format = Image.Format.PNG
-            size = Image.Size.Size512
-        }
-        val (userOwner, avatarOwner) = getOwnerInfo(interaction)
-        // Check if the user has provided a user ID or @mention.
-        if (userOption == null) {
-            commandInteraction.respondPublic {
-                embed {
-                    title = "Please provide a user ID or @mention."
-                    color = Color(255, 0, 0)
-                }
-            }
-            return
-        }
-
-
-        // Get the avatar of the user.
-        commandInteraction.respondPublic {
-            embed {
-                title = "Avatar ${user.username}"
-                url = avatarUrl
-                image = avatarUrl
-                footer {
-                    text = "Bot được phát triển bởi $userOwner"
-                    icon = "$avatarOwner"
-                }
-                author {
-                    name = commandInteraction.user.username
-                    icon = commandInteraction.user.avatar?.cdnUrl?.toUrl()
-                }
-                color = Color(49,14,76)
-                timestamp = Clock.System.now()
-            }
-        }
-
-    }
-
     private suspend fun Message.getUserMention(): User? {
         return this.mentionedUsers.firstOrNull()
     }
+
 
     override val description: String
         get() = "Lấy Avatar"
