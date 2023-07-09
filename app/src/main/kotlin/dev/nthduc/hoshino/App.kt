@@ -13,6 +13,8 @@ import dev.nthduc.hoshino.commands.anime.*
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.extensions.AvatarExtension
 import dev.nthduc.hoshino.extensions.CoinflipExtension
+import dev.nthduc.hoshino.extensions.ServerInfoExtension
+import dev.nthduc.hoshino.extensions.UserInfoExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -79,14 +81,12 @@ suspend fun main() {
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
         val helloCommand = HelloCommand()
-        val coinflipCommand = CoinflipCommand()
         val helpCommand = HelpCommand(commandHandler.commands)
         val serverInfoCommand = ServerInfoCommand()
 
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
-        slashCommandHandler.registerCommand("coinflip", "Flip a coin", coinflipCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
-        slashCommandHandler.registerCommand("serverinfo", "Hiển thị thông tin về Server", serverInfoCommand::execute)
+//        slashCommandHandler.registerCommand("serverinfo", "Hiển thị thông tin về Server", serverInfoCommand::execute)
 
 
         slashCommandHandler.listen()
@@ -120,6 +120,8 @@ suspend fun main() {
             extensions {
                 add(::AvatarExtension)
                 add(::CoinflipExtension)
+                add(::ServerInfoExtension)
+                add(::UserInfoExtension)
             }
         }
         bot.start()
