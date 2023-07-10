@@ -94,17 +94,6 @@ suspend fun main() {
             message.channel.type()
             commandHandler.handleCommand(this)
         }
-        val bot = ExtensibleBot(token) {
-            extensions {
-                add(::AvatarExtension)
-                add(::CoinflipExtension)
-                add(::ServerInfoExtension)
-                add(::UserInfoExtension)
-                add(::AboutExtension)
-                add(::AiHoshinoExtension)
-            }
-        }
-        bot.start()
 
         client.login {
             presence { watching("Oshi no Ko") }
@@ -123,8 +112,17 @@ suspend fun main() {
             intents += Intent.DirectMessages
             intents += Intent.GuildWebhooks
         }
-
-
+        val bot = ExtensibleBot(token) {
+            extensions {
+                add(::AvatarExtension)
+                add(::CoinflipExtension)
+                add(::ServerInfoExtension)
+                add(::UserInfoExtension)
+                add(::AboutExtension)
+                add(::AiHoshinoExtension)
+            }
+        }
+        bot.start()
 
     }
 }
