@@ -38,6 +38,7 @@ class AboutExtension : Extension() {
                         thumbnail {
                             url = "attachment://ai-hoshino.gif"
                         }
+                        url = "https://www.youtube.com/watch?v=pk3qOPMXzDk"
                         footer {
                             text = "Bot được phát triển bởi $userOwner"
                             icon = "$avatarOwner"
