@@ -28,6 +28,7 @@ class AboutCommand() : Command {
                 embed {
                     title = "AI Hoshino"
                     color = Color(49, 14, 76)
+                    url = URL("https://www.youtube.com/watch?v=pk3qOPMXzDk")
                     description = """
                     Ai Hoshino là một nhân vật chính trong bộ truyện tranh Oshi no Ko. Cô là người mẫu ảnh của loạt phim và từng là thần tượng hàng đầu của [B-Komachi](https://oshinoko.fandom.com/wiki/B-Komachi). 
                     

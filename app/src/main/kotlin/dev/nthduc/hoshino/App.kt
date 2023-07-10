@@ -64,6 +64,7 @@ suspend fun main() {
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
         commandHandler.registerCommand("serverinfo", ServerInfoCommand())
+        commandHandler.registerCommand("userinfo", UserInfoCommand())
         commandHandler.registerCommand("about", AboutCommand())
         commandHandler.registerCommand("kiss", KissCommand())
         commandHandler.registerCommand("hug", HugCommand())
@@ -100,6 +101,7 @@ suspend fun main() {
                 add(::ServerInfoExtension)
                 add(::UserInfoExtension)
                 add(::AboutExtension)
+                add(::AiHoshinoExtension)
             }
         }
         bot.start()

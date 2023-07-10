@@ -6,6 +6,7 @@
  * User Manual available at https://docs.gradle.org/8.1.1/userguide/building_java_projects.html
  */
 val ktor_version: String by project
+val kord_version: String by project
 val saucenaoapi_version: String by project
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
@@ -62,7 +63,7 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.1-jre")
 
-    implementation("dev.kord:kord-core:0.9.0")
+    implementation("dev.kord:kord-core:$kord_version")
 
     implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
 
