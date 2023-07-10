@@ -11,10 +11,7 @@ import dev.kord.gateway.PrivilegedIntent
 import dev.nthduc.hoshino.commands.*
 import dev.nthduc.hoshino.commands.anime.*
 import dev.nthduc.hoshino.commands.music.*
-import dev.nthduc.hoshino.extensions.AvatarExtension
-import dev.nthduc.hoshino.extensions.CoinflipExtension
-import dev.nthduc.hoshino.extensions.ServerInfoExtension
-import dev.nthduc.hoshino.extensions.UserInfoExtension
+import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -67,6 +64,7 @@ suspend fun main() {
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
         commandHandler.registerCommand("serverinfo", ServerInfoCommand())
+        commandHandler.registerCommand("about", AboutCommand())
         commandHandler.registerCommand("kiss", KissCommand())
         commandHandler.registerCommand("hug", HugCommand())
         commandHandler.registerCommand("cuddle", CuddleCommand())
@@ -82,11 +80,9 @@ suspend fun main() {
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
         val helloCommand = HelloCommand()
         val helpCommand = HelpCommand(commandHandler.commands)
-        val serverInfoCommand = ServerInfoCommand()
 
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
-//        slashCommandHandler.registerCommand("serverinfo", "Hiển thị thông tin về Server", serverInfoCommand::execute)
 
 
         slashCommandHandler.listen()
@@ -97,6 +93,16 @@ suspend fun main() {
             message.channel.type()
             commandHandler.handleCommand(this)
         }
+        val bot = ExtensibleBot(token) {
+            extensions {
+                add(::AvatarExtension)
+                add(::CoinflipExtension)
+                add(::ServerInfoExtension)
+                add(::UserInfoExtension)
+                add(::AboutExtension)
+            }
+        }
+        bot.start()
 
         client.login {
             presence { watching("Oshi no Ko") }
@@ -116,15 +122,7 @@ suspend fun main() {
             intents += Intent.GuildWebhooks
         }
 
-        val bot = ExtensibleBot(token) {
-            extensions {
-                add(::AvatarExtension)
-                add(::CoinflipExtension)
-                add(::ServerInfoExtension)
-                add(::UserInfoExtension)
-            }
-        }
-        bot.start()
+
 
     }
 }

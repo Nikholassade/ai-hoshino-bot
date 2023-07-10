@@ -61,12 +61,12 @@ class UserInfoExtension : Extension() {
                     inline = true
                 }
                 field {
-                    name = "Ngày tạo"
+                    name = "Ngày tạo tài khoản"
                     value = formatDate(member.id.timestamp)
-                    inline = true
+                    inline = false
                 }
                 field {
-                    name = "Ngày tham gia"
+                    name = "Ngày vào máy chủ"
                     value = formatDate(member.joinedAt)
                     inline = true
                 }
