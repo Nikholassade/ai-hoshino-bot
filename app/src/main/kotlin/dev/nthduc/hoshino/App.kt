@@ -113,21 +113,20 @@ suspend fun main() {
             intents += Intent.DirectMessages
             intents += Intent.GuildWebhooks
         }
-        launch {
-            val bot = ExtensibleBot(token) {
-                extensions {
-                    add(::AvatarExtension)
-                    add(::CoinflipExtension)
-                    add(::ServerInfoExtension)
-                    add(::UserInfoExtension)
-                    add(::AboutExtension)
-                    add(::AiHoshinoExtension)
-                }
-            }
-            bot.start()
-        }
 
+        val bot = ExtensibleBot(token) {
+            extensions {
+                add(::AvatarExtension)
+                add(::CoinflipExtension)
+                add(::ServerInfoExtension)
+                add(::UserInfoExtension)
+                add(::AboutExtension)
+                add(::AiHoshinoExtension)
+            }
+        }
+        bot.start()
     }
+
 }
 
 fun Application.module() {
