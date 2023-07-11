@@ -53,7 +53,7 @@ suspend fun main() {
         commandHandler.registerCommand("avatar", AvatarCommand())
         commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
         commandHandler.registerCommand("play", PlayCommand(lavalink, client))
-        commandHandler.registerCommand("playtest", PlayCommand(lavalink, client))
+        commandHandler.registerCommand("playtest1", PlayCommand(lavalink, client))
 
         commandHandler.registerCommand("stop", StopCommand(lavalink))
         commandHandler.registerCommand("pause", PauseCommand(lavalink))
@@ -113,17 +113,19 @@ suspend fun main() {
             intents += Intent.DirectMessages
             intents += Intent.GuildWebhooks
         }
-        val bot = ExtensibleBot(token) {
-            extensions {
-                add(::AvatarExtension)
-                add(::CoinflipExtension)
-                add(::ServerInfoExtension)
-                add(::UserInfoExtension)
-                add(::AboutExtension)
-                add(::AiHoshinoExtension)
+        launch {
+            val bot = ExtensibleBot(token) {
+                extensions {
+                    add(::AvatarExtension)
+                    add(::CoinflipExtension)
+                    add(::ServerInfoExtension)
+                    add(::UserInfoExtension)
+                    add(::AboutExtension)
+                    add(::AiHoshinoExtension)
+                }
             }
+            bot.start()
         }
-        bot.start()
 
     }
 }

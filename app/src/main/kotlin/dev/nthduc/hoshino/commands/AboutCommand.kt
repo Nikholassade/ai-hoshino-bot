@@ -7,9 +7,6 @@ import dev.nthduc.hoshino.utils.getOwnerInfo
 import io.ktor.client.request.forms.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
-import java.io.File
-import java.io.FileInputStream
-import java.net.URL
 
 class AboutCommand() : Command {
     override val description: String
@@ -18,24 +15,23 @@ class AboutCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message
         val (userOwner, avatarOwner) = getOwnerInfo(event)
-        var url = this::class.java.getResource("/images/ai-hoshino.gif")
-        if (url != null) {
-            val fileInputStream = FileInputStream(File(url.toURI()))
-            val byteReadChannel = fileInputStream.toByteReadChannel()
-            val channelProvider = ChannelProvider(size = File(url.toURI()).length()) { byteReadChannel }
+        val inputStream = this::class.java.getResourceAsStream("/images/ai-hoshino.gif")
+        if (inputStream != null) {
+            val byteReadChannel = inputStream.toByteReadChannel()
+            val channelProvider = ChannelProvider(size = inputStream.available().toLong()) { byteReadChannel }
             event.kord.rest.channel.createMessage(event.message.channelId) {
                 addFile("ai-hoshino.gif", channelProvider)
                 embed {
                     title = "AI Hoshino"
                     color = Color(49, 14, 76)
-                    url = URL("https://www.youtube.com/watch?v=pk3qOPMXzDk")
+                    url = "https://www.youtube.com/watch?v=pk3qOPMXzDk"
                     description = """
                     Ai Hoshino là một nhân vật chính trong bộ truyện tranh Oshi no Ko. Cô là người mẫu ảnh của loạt phim và từng là thần tượng hàng đầu của [B-Komachi](https://oshinoko.fandom.com/wiki/B-Komachi). 
                     
                     Bot sử dụng [Java](https://www.java.com/en/) và [Kotlin](https://kotlinlang.org/) để tương tác với Discord API.
                 """.trimIndent()
                     thumbnail {
-                        url = URL("attachment://ai-hoshino.gif")
+                        url = "attachment://ai-hoshino.gif"
                     }
                     footer {
                         text = "Bot được phát triển bởi $userOwner"
