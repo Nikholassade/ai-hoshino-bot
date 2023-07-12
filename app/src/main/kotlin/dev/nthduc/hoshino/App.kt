@@ -13,13 +13,13 @@ import dev.nthduc.hoshino.commands.HelpCommand
 import dev.nthduc.hoshino.commands.anime.SearchAnimeCommand
 import dev.nthduc.hoshino.commands.anime.SearchAnimeSauceNaoCommand
 import dev.nthduc.hoshino.commands.music.*
+import dev.nthduc.hoshino.config.*
 import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.extensions.anime.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
 import dev.schlaubi.lavakord.kord.lavakord
-import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -35,15 +35,14 @@ suspend fun main() {
             embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
                 .start(wait = true)
         }
-        val dotenv = dotenv()
-        val token = dotenv["BOT_TOKEN"]
-        val applicationId = Snowflake(dotenv["APPLICATION_ID"])
+        val token = BOT_TOKEN
+        val applicationId = Snowflake(APPLICATION_ID)
         val client = Kord(token)
 
         val lavalink = client.lavakord()
         lavalink.addNode(
-            serverUri = dotenv["LAVALINK_SERVER"],
-            password = dotenv["LAVALINK_PASSWORD"]
+            serverUri = LAVALINK_SERVER,
+            password = LAVALINK_PASSWORD
         )
 
 
@@ -84,7 +83,7 @@ suspend fun main() {
         }
         val bot = ExtensibleBot(token) {
             chatCommands {
-                defaultPrefix = "?"
+                defaultPrefix = DEFAULT_PREFIX
                 enabled = true
             }
             extensions {
@@ -102,6 +101,9 @@ suspend fun main() {
                 add(::SlapExtension)
                 add(::SmugExtension)
                 add(::TickleExtension)
+            }
+            presence {
+                watching("Oshi no Ko")
             }
         }
         bot.start()
