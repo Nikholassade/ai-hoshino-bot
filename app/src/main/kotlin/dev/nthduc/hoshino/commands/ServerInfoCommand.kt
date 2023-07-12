@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
+@Deprecated("ServerInfoCommand Replace ServerInfoExtension")
 class ServerInfoCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message

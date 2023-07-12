@@ -8,15 +8,18 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import dev.nthduc.hoshino.commands.*
-import dev.nthduc.hoshino.commands.anime.*
+import dev.nthduc.hoshino.commands.HelloCommand
+import dev.nthduc.hoshino.commands.HelpCommand
+import dev.nthduc.hoshino.commands.anime.SearchAnimeCommand
+import dev.nthduc.hoshino.commands.anime.SearchAnimeSauceNaoCommand
 import dev.nthduc.hoshino.commands.music.*
+import dev.nthduc.hoshino.config.*
 import dev.nthduc.hoshino.extensions.*
+import dev.nthduc.hoshino.extensions.anime.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
 import dev.schlaubi.lavakord.kord.lavakord
-import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -32,15 +35,14 @@ suspend fun main() {
             embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
                 .start(wait = true)
         }
-        val dotenv = dotenv()
-        val token = dotenv["BOT_TOKEN"]
-        val applicationId = Snowflake(dotenv["APPLICATION_ID"])
+        val token = BOT_TOKEN
+        val applicationId = Snowflake(APPLICATION_ID)
         val client = Kord(token)
 
         val lavalink = client.lavakord()
         lavalink.addNode(
-            serverUri = dotenv["LAVALINK_SERVER"],
-            password = dotenv["LAVALINK_PASSWORD"]
+            serverUri = LAVALINK_SERVER,
+            password = LAVALINK_PASSWORD
         )
 
 
@@ -49,11 +51,8 @@ suspend fun main() {
 
         val commandHandler = CommandHandler()
         commandHandler.registerCommand("hello", HelloCommand())
-        commandHandler.registerCommand("coinflip", CoinflipCommand())
-        commandHandler.registerCommand("avatar", AvatarCommand())
         commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
         commandHandler.registerCommand("play", PlayCommand(lavalink, client))
-        commandHandler.registerCommand("playtest1", PlayCommand(lavalink, client))
 
         commandHandler.registerCommand("stop", StopCommand(lavalink))
         commandHandler.registerCommand("pause", PauseCommand(lavalink))
@@ -64,17 +63,6 @@ suspend fun main() {
         commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
-        commandHandler.registerCommand("serverinfo", ServerInfoCommand())
-        commandHandler.registerCommand("userinfo", UserInfoCommand())
-        commandHandler.registerCommand("about", AboutCommand())
-        commandHandler.registerCommand("kiss", KissCommand())
-        commandHandler.registerCommand("hug", HugCommand())
-        commandHandler.registerCommand("cuddle", CuddleCommand())
-        commandHandler.registerCommand("slap", SlapCommand())
-        commandHandler.registerCommand("pat", PatCommand())
-        commandHandler.registerCommand("smug", SmugCommand())
-        commandHandler.registerCommand("feed", FeedCommand())
-        commandHandler.registerCommand("tickle", TickleCommand())
         commandHandler.registerCommand("timnguon", SearchAnimeCommand())
         commandHandler.registerCommand("sauce", SearchAnimeSauceNaoCommand())
 
@@ -85,8 +73,6 @@ suspend fun main() {
 
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
-
-
         slashCommandHandler.listen()
 
 
@@ -95,6 +81,32 @@ suspend fun main() {
             message.channel.type()
             commandHandler.handleCommand(this)
         }
+        val bot = ExtensibleBot(token) {
+            chatCommands {
+                defaultPrefix = DEFAULT_PREFIX
+                enabled = true
+            }
+            extensions {
+                add(::AvatarExtension)
+                add(::CoinflipExtension)
+                add(::ServerInfoExtension)
+                add(::UserInfoExtension)
+                add(::AboutExtension)
+                add(::AiHoshinoExtension)
+                add(::CuddleExtension)
+                add(::FeedExtension)
+                add(::HugExtension)
+                add(::KissExtension)
+                add(::PatExtension)
+                add(::SlapExtension)
+                add(::SmugExtension)
+                add(::TickleExtension)
+            }
+            presence {
+                watching("Oshi no Ko")
+            }
+        }
+        bot.start()
 
         client.login {
             presence { watching("Oshi no Ko") }
@@ -114,17 +126,6 @@ suspend fun main() {
             intents += Intent.GuildWebhooks
         }
 
-        val bot = ExtensibleBot(token) {
-            extensions {
-                add(::AvatarExtension)
-                add(::CoinflipExtension)
-                add(::ServerInfoExtension)
-                add(::UserInfoExtension)
-                add(::AboutExtension)
-                add(::AiHoshinoExtension)
-            }
-        }
-        bot.start()
     }
 
 }
