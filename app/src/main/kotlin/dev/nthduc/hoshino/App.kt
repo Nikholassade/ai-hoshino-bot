@@ -13,7 +13,6 @@ import dev.nthduc.hoshino.commands.HelloCommand
 import dev.nthduc.hoshino.commands.HelpCommand
 import dev.nthduc.hoshino.commands.anime.SearchAnimeCommand
 import dev.nthduc.hoshino.commands.anime.SearchAnimeSauceNaoCommand
-import dev.nthduc.hoshino.commands.anime.SmugCommand
 import dev.nthduc.hoshino.commands.anime.TickleCommand
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.extensions.*
@@ -68,7 +67,6 @@ suspend fun main() {
         commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
-        commandHandler.registerCommand("smug", SmugCommand())
         commandHandler.registerCommand("tickle", TickleCommand())
         commandHandler.registerCommand("timnguon", SearchAnimeCommand())
         commandHandler.registerCommand("sauce", SearchAnimeSauceNaoCommand())
@@ -106,6 +104,7 @@ suspend fun main() {
                 add(::KissExtension)
                 add(::PatExtension)
                 add(::SlapExtension)
+                add(::SmugExtension)
             }
         }
         bot.start()
