@@ -15,6 +15,7 @@ import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.extensions.anime.CuddleExtension
 import dev.nthduc.hoshino.extensions.anime.FeedExtension
 import dev.nthduc.hoshino.extensions.anime.HugExtension
+import dev.nthduc.hoshino.extensions.anime.KissExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -113,6 +114,7 @@ suspend fun main() {
                 add(::CuddleExtension)
                 add(::FeedExtension)
                 add(::HugExtension)
+                add(::KissExtension)
             }
         }
         bot.start()
