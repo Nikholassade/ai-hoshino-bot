@@ -8,12 +8,10 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import dev.nthduc.hoshino.commands.AvatarCommand
 import dev.nthduc.hoshino.commands.HelloCommand
 import dev.nthduc.hoshino.commands.HelpCommand
 import dev.nthduc.hoshino.commands.anime.SearchAnimeCommand
 import dev.nthduc.hoshino.commands.anime.SearchAnimeSauceNaoCommand
-import dev.nthduc.hoshino.commands.anime.TickleCommand
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.extensions.anime.*
@@ -54,7 +52,6 @@ suspend fun main() {
 
         val commandHandler = CommandHandler()
         commandHandler.registerCommand("hello", HelloCommand())
-        commandHandler.registerCommand("avatar", AvatarCommand())
         commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
         commandHandler.registerCommand("play", PlayCommand(lavalink, client))
 
@@ -67,7 +64,6 @@ suspend fun main() {
         commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
-        commandHandler.registerCommand("tickle", TickleCommand())
         commandHandler.registerCommand("timnguon", SearchAnimeCommand())
         commandHandler.registerCommand("sauce", SearchAnimeSauceNaoCommand())
 
@@ -105,6 +101,7 @@ suspend fun main() {
                 add(::PatExtension)
                 add(::SlapExtension)
                 add(::SmugExtension)
+                add(::TickleExtension)
             }
         }
         bot.start()

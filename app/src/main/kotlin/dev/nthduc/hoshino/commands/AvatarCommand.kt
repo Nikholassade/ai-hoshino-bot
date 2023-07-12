@@ -10,7 +10,7 @@ import dev.nthduc.hoshino.utils.getOwnerInfo
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.datetime.Clock
 
-
+@Deprecated("AvatarCommand Replace AvatarExtension")
 class AvatarCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message

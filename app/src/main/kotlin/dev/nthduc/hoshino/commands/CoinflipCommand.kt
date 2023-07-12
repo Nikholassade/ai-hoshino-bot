@@ -6,6 +6,7 @@ import dev.kord.core.entity.interaction.Interaction
 import dev.kord.core.event.message.MessageCreateEvent
 import java.util.*
 
+@Deprecated("CoinflipCommand Replace CoinflipExtension")
 class CoinflipCommand() : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val message = event.message

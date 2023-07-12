@@ -8,6 +8,7 @@ import io.ktor.client.request.forms.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
 
+@Deprecated("AboutCommand Replace AboutExtension")
 class AboutCommand() : Command {
     override val description: String
         get() = "Hiển thị thông tin về bot"
