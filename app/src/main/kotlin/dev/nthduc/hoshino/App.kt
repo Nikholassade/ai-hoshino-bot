@@ -12,6 +12,7 @@ import dev.nthduc.hoshino.commands.*
 import dev.nthduc.hoshino.commands.anime.*
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.extensions.*
+import dev.nthduc.hoshino.extensions.anime.CuddleExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -107,6 +108,7 @@ suspend fun main() {
                 add(::UserInfoExtension)
                 add(::AboutExtension)
                 add(::AiHoshinoExtension)
+                add(::CuddleExtension)
             }
         }
         bot.start()
