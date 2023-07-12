@@ -8,14 +8,16 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import dev.nthduc.hoshino.commands.*
-import dev.nthduc.hoshino.commands.anime.*
+import dev.nthduc.hoshino.commands.AvatarCommand
+import dev.nthduc.hoshino.commands.HelloCommand
+import dev.nthduc.hoshino.commands.HelpCommand
+import dev.nthduc.hoshino.commands.anime.SearchAnimeCommand
+import dev.nthduc.hoshino.commands.anime.SearchAnimeSauceNaoCommand
+import dev.nthduc.hoshino.commands.anime.SmugCommand
+import dev.nthduc.hoshino.commands.anime.TickleCommand
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.extensions.*
-import dev.nthduc.hoshino.extensions.anime.CuddleExtension
-import dev.nthduc.hoshino.extensions.anime.FeedExtension
-import dev.nthduc.hoshino.extensions.anime.HugExtension
-import dev.nthduc.hoshino.extensions.anime.KissExtension
+import dev.nthduc.hoshino.extensions.anime.*
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -53,11 +55,9 @@ suspend fun main() {
 
         val commandHandler = CommandHandler()
         commandHandler.registerCommand("hello", HelloCommand())
-        commandHandler.registerCommand("coinflip", CoinflipCommand())
         commandHandler.registerCommand("avatar", AvatarCommand())
         commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
         commandHandler.registerCommand("play", PlayCommand(lavalink, client))
-        commandHandler.registerCommand("playtest1", PlayCommand(lavalink, client))
 
         commandHandler.registerCommand("stop", StopCommand(lavalink))
         commandHandler.registerCommand("pause", PauseCommand(lavalink))
@@ -68,16 +68,7 @@ suspend fun main() {
         commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
-        commandHandler.registerCommand("serverinfo", ServerInfoCommand())
-        commandHandler.registerCommand("userinfo", UserInfoCommand())
-        commandHandler.registerCommand("about", AboutCommand())
-        commandHandler.registerCommand("kiss", KissCommand())
-        commandHandler.registerCommand("hug", HugCommand())
-        commandHandler.registerCommand("cuddle", CuddleCommand())
-        commandHandler.registerCommand("slap", SlapCommand())
-        commandHandler.registerCommand("pat", PatCommand())
         commandHandler.registerCommand("smug", SmugCommand())
-        commandHandler.registerCommand("feed", FeedCommand())
         commandHandler.registerCommand("tickle", TickleCommand())
         commandHandler.registerCommand("timnguon", SearchAnimeCommand())
         commandHandler.registerCommand("sauce", SearchAnimeSauceNaoCommand())
@@ -89,8 +80,6 @@ suspend fun main() {
 
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
-
-
         slashCommandHandler.listen()
 
 
@@ -115,6 +104,8 @@ suspend fun main() {
                 add(::FeedExtension)
                 add(::HugExtension)
                 add(::KissExtension)
+                add(::PatExtension)
+                add(::SlapExtension)
             }
         }
         bot.start()

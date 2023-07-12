@@ -5,42 +5,42 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.chatCommand
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.nthduc.hoshino.commands.anime.KissCommand
+import dev.nthduc.hoshino.commands.anime.SlapCommand
 
-class KissExtension : Extension() {
-    override val name = "kiss"
+class SlapExtension : Extension() {
+    override val name = "slap"
 
     override suspend fun setup() {
-        val kissCommand = KissCommand()
+        val slapCommand = SlapCommand()
 
-        publicSlashCommand(::KissArgs) {
-            name = "kiss"
-            description = kissCommand.description
+        publicSlashCommand(::SlapArgs) {
+            name = "slap"
+            description = slapCommand.description
 
             action {
                 respond {
                     content = "Đang xử lí ..."
                 }
-                kissCommand.execute(event)
+                slapCommand.execute(event)
             }
         }
 
-        chatCommand(::KissArgs) {
-            name = "kiss"
-            description = kissCommand.description
+        chatCommand(::SlapArgs) {
+            name = "slap"
+            description = slapCommand.description
 
             check { failIf(event.message.author == null) }
 
             action {
-                kissCommand.execute(event)
+                slapCommand.execute(event)
             }
         }
     }
 
-    inner class KissArgs : Arguments() {
+    inner class SlapArgs : Arguments() {
         val user by optionalUser {
             name = "user"
-            description = "Người dùng để Hôn một ai đó"
+            description = "Người dùng để tát một ai đó"
         }
     }
 }

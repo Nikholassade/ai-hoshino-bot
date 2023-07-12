@@ -40,7 +40,7 @@ class HugExtension : Extension() {
     inner class HugArgs : Arguments() {
         val user by optionalUser {
             name = "user"
-            description = "Người dùng để cho một ai đó ăn"
+            description = "Người dùng để Ôm một ai đó"
         }
     }
 }

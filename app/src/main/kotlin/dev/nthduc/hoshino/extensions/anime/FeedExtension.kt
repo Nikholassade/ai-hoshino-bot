@@ -11,28 +11,28 @@ class FeedExtension : Extension() {
     override val name = "feed"
 
     override suspend fun setup() {
-        val cuddleCommand = FeedCommand()
+        val feedCommand = FeedCommand()
 
         publicSlashCommand(::FeedArgs) {
             name = "feed"
-            description = cuddleCommand.description
+            description = feedCommand.description
 
             action {
                 respond {
                     content = "Đang xử lí ..."
                 }
-                cuddleCommand.execute(event)
+                feedCommand.execute(event)
             }
         }
 
         chatCommand(::FeedArgs) {
             name = "feed"
-            description = cuddleCommand.description
+            description = feedCommand.description
 
             check { failIf(event.message.author == null) }
 
             action {
-                cuddleCommand.execute(event)
+                feedCommand.execute(event)
             }
         }
     }
