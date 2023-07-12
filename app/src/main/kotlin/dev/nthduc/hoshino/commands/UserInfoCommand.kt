@@ -10,6 +10,7 @@ import dev.nthduc.hoshino.utils.formatDate
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
 
+@Deprecated("UserInfoCommand Replace UserExtension")
 class UserInfoCommand : Command {
     override val description: String
         get() = "Hiển thị thông tin về người dùng"

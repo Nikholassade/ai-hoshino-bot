@@ -5,16 +5,16 @@ import com.kotlindiscord.kord.extensions.extensions.Extension
 import com.kotlindiscord.kord.extensions.extensions.chatCommand
 import com.kotlindiscord.kord.extensions.extensions.publicSlashCommand
 import com.kotlindiscord.kord.extensions.types.respond
-import dev.nthduc.hoshino.commands.anime.FeedCommand
+import dev.nthduc.hoshino.commands.anime.HugCommand
 
-class FeedExtension : Extension() {
-    override val name = "feed"
+class HugExtension : Extension() {
+    override val name = "hug"
 
     override suspend fun setup() {
-        val cuddleCommand = FeedCommand()
+        val cuddleCommand = HugCommand()
 
-        publicSlashCommand(::FeedArgs) {
-            name = "feed"
+        publicSlashCommand(::HugArgs) {
+            name = "hug"
             description = cuddleCommand.description
 
             action {
@@ -25,8 +25,8 @@ class FeedExtension : Extension() {
             }
         }
 
-        chatCommand(::FeedArgs) {
-            name = "feed"
+        chatCommand(::HugArgs) {
+            name = "hug"
             description = cuddleCommand.description
 
             check { failIf(event.message.author == null) }
@@ -37,7 +37,7 @@ class FeedExtension : Extension() {
         }
     }
 
-    inner class FeedArgs : Arguments() {
+    inner class HugArgs : Arguments() {
         val user by optionalUser {
             name = "user"
             description = "Người dùng để cho một ai đó ăn"
