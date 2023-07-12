@@ -71,7 +71,7 @@ class AboutExtension : Extension() {
         chatCommand {
             name = "about"
             description = "Hiển thị thông tin về bot"
-            aliasKey = "ab"
+            aliasKey = "abt"
 
             action {
                 val (userOwner, avatarOwner) = getOwnerInfo(event)
