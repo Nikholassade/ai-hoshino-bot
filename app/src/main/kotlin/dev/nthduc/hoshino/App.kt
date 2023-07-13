@@ -101,6 +101,7 @@ suspend fun main() {
                 add(::SlapExtension)
                 add(::SmugExtension)
                 add(::TickleExtension)
+                add(::SearchAnimeExtension)
             }
             presence {
                 watching("Oshi no Ko")
