@@ -10,8 +10,6 @@ import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.nthduc.hoshino.commands.HelloCommand
 import dev.nthduc.hoshino.commands.HelpCommand
-import dev.nthduc.hoshino.commands.anime.SearchAnimeCommand
-import dev.nthduc.hoshino.commands.anime.SearchAnimeSauceNaoCommand
 import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.config.*
 import dev.nthduc.hoshino.extensions.*
@@ -63,9 +61,6 @@ suspend fun main() {
         commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
         commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
-        commandHandler.registerCommand("timnguon", SearchAnimeCommand())
-        commandHandler.registerCommand("sauce", SearchAnimeSauceNaoCommand())
-
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
         val helloCommand = HelloCommand()
@@ -102,6 +97,7 @@ suspend fun main() {
                 add(::SmugExtension)
                 add(::TickleExtension)
                 add(::SearchAnimeExtension)
+                add(::SearchAnimeSauceNaoExtension)
             }
             presence {
                 watching("Oshi no Ko")
