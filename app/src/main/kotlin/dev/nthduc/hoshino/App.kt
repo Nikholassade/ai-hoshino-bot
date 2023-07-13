@@ -14,6 +14,7 @@ import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.config.*
 import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.extensions.anime.*
+import dev.nthduc.hoshino.extensions.music.PlayExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 
-@OptIn(KordPreview::class)
+@OptIn(KordPreview::class, PrivilegedIntent::class)
 suspend fun main() {
     coroutineScope {
         launch {
@@ -50,7 +51,7 @@ suspend fun main() {
         val commandHandler = CommandHandler()
         commandHandler.registerCommand("hello", HelloCommand())
         commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
-        commandHandler.registerCommand("play", PlayCommand(lavalink, client))
+        commandHandler.registerCommand("play", PlayCommand(lavalink,client))
 
         commandHandler.registerCommand("stop", StopCommand(lavalink))
         commandHandler.registerCommand("pause", PauseCommand(lavalink))
@@ -69,7 +70,7 @@ suspend fun main() {
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
         slashCommandHandler.listen()
-
+        val playExtension = PlayExtension(lavalink,client)
 
         client.on<MessageCreateEvent> {
             logger.debug("Received message: ${message.content}")
@@ -80,6 +81,7 @@ suspend fun main() {
             chatCommands {
                 defaultPrefix = DEFAULT_PREFIX
                 enabled = true
+                invokeOnMention = true
             }
             extensions {
                 add(::AvatarExtension)
@@ -98,9 +100,21 @@ suspend fun main() {
                 add(::TickleExtension)
                 add(::SearchAnimeExtension)
                 add(::SearchAnimeSauceNaoExtension)
+                add{ playExtension }
             }
             presence {
                 watching("Oshi no Ko")
+            }
+            intents {
+                +Intent.MessageContent
+                +Intent.GuildVoiceStates
+                +Intent.GuildMessageTyping
+                +Intent.Guilds
+                +Intent.AutoModerationConfiguration
+                +Intent.AutoModerationExecution
+                +Intent.GuildWebhooks
+                +Intent.GuildMembers
+                +Intent.GuildPresences
             }
         }
         bot.start()
