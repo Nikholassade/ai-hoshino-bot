@@ -36,7 +36,7 @@ class ButtonHandler(private val link: Link,
                                     label = "Tiếp tục phát"
                                     disabled = false
                                 }
-                                interactionButton(ButtonStyle.Secondary, "skipBtn") {
+                                interactionButton(ButtonStyle.Success, "skipBtn") {
                                     label = "Bài tiếp theo"
                                     disabled = queue.size < 1
                                 }
