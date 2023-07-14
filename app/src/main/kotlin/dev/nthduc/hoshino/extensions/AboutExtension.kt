@@ -13,8 +13,6 @@ import dev.nthduc.hoshino.utils.getOwnerInfo
 import io.ktor.client.request.forms.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
-import java.io.File
-import java.io.FileInputStream
 
 class AboutExtension : Extension() {
     override val name = "about"
@@ -54,11 +52,10 @@ class AboutExtension : Extension() {
                             }
                         }
                     }
-                    val url = this::class.java.getResource("/images/ai-hoshino.gif")
-                    if (url != null) {
-                        val fileInputStream = FileInputStream(File(url.toURI()))
-                        val byteReadChannel = fileInputStream.toByteReadChannel()
-                        val channelProvider = ChannelProvider(size = File(url.toURI()).length()) { byteReadChannel }
+                    val inputStream = this::class.java.getResourceAsStream("/images/ai-hoshino.gif")
+                    if (inputStream != null) {
+                        val byteReadChannel = inputStream.toByteReadChannel()
+                        val channelProvider = ChannelProvider(size = inputStream.available().toLong()) { byteReadChannel }
                         addFile("ai-hoshino.gif", channelProvider)
                     } else {
                         respond {
@@ -103,17 +100,17 @@ class AboutExtension : Extension() {
                             }
                         }
                     }
-                    val url = this::class.java.getResource("/images/ai-hoshino.gif")
-                    if (url != null) {
-                        val fileInputStream = FileInputStream(File(url.toURI()))
-                        val byteReadChannel = fileInputStream.toByteReadChannel()
-                        val channelProvider = ChannelProvider(size = File(url.toURI()).length()) { byteReadChannel }
+                    val inputStream = this::class.java.getResourceAsStream("/images/ai-hoshino.gif")
+                    if (inputStream != null) {
+                        val byteReadChannel = inputStream.toByteReadChannel()
+                        val channelProvider = ChannelProvider(size = inputStream.available().toLong()) { byteReadChannel }
                         addFile("ai-hoshino.gif", channelProvider)
                     } else {
                         message.respond {
                             content = "Lệnh about đang gặp vấn đề , hãy chờ fix nhé ^_^"
                         }
                     }
+
                 }
             }
         }
