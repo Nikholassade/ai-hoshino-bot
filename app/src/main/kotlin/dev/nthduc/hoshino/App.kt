@@ -5,16 +5,13 @@ import dev.kord.common.annotation.KordPreview
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
 import dev.kord.core.event.message.MessageCreateEvent
-import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.nthduc.hoshino.commands.HelloCommand
-import dev.nthduc.hoshino.commands.HelpCommand
 import dev.nthduc.hoshino.config.*
 import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.extensions.anime.*
 import dev.nthduc.hoshino.extensions.music.MusicExtension
-import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
 import dev.schlaubi.lavakord.kord.lavakord
@@ -43,33 +40,23 @@ suspend fun main() {
             password = LAVALINK_PASSWORD
         )
 
-
         val logger = LoggerFactory.getLogger("hoshino")
         logger.info("Ai Hoshino started")
-
-        val commandHandler = CommandHandler()
-        commandHandler.registerCommand("hello", HelloCommand())
-        commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
 
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
         val helloCommand = HelloCommand()
-        val helpCommand = HelpCommand(commandHandler.commands)
 
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
-        slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
         slashCommandHandler.listen()
 
-        client.on<MessageCreateEvent> {
-            logger.debug("Received message: ${message.content}")
-            message.channel.type()
-            commandHandler.handleCommand(this)
-        }
         val bot = ExtensibleBot(token) {
             chatCommands {
                 defaultPrefix = DEFAULT_PREFIX
                 enabled = true
                 invokeOnMention = true
+
+
             }
             extensions {
                 add(::AvatarExtension)
@@ -89,6 +76,7 @@ suspend fun main() {
                 add(::SearchAnimeExtension)
                 add(::SearchAnimeSauceNaoExtension)
                 add(::MusicExtension)
+                add(::HelpExtension)
             }
             presence {
                 watching("Oshi no Ko")
@@ -105,26 +93,11 @@ suspend fun main() {
                 +Intent.GuildPresences
             }
         }
-        bot.start()
-
-        client.login {
-            presence { watching("Oshi no Ko") }
-
-
-            @OptIn(PrivilegedIntent::class)
-            intents += Intent.MessageContent
-            intents += Intent.GuildVoiceStates
-            intents += Intent.GuildMessageTyping
-            intents += Intent.Guilds
-            intents += Intent.GuildWebhooks
-            intents += Intent.AutoModerationConfiguration
-            intents += Intent.AutoModerationExecution
-            intents += Intent.AutoModerationExecution
-            intents += Intent.DirectMessageTyping
-            intents += Intent.DirectMessages
-            intents += Intent.GuildWebhooks
+        bot.on<MessageCreateEvent>{
+            logger.debug("Received message: ${message.content}")
+            message.channel.type()
         }
-
+        bot.start()
     }
 
 }

@@ -4,6 +4,8 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 
+@Deprecated("NowPlayingCommand Replace MusicExtension")
+
 class NowPlayingCommand(private val lavalink: LavaKord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val link = lavalink.getLink(event.guildId?.toString() ?: return)

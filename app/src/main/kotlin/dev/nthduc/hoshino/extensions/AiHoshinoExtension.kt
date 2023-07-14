@@ -14,8 +14,6 @@ import dev.nthduc.hoshino.utils.getOwnerInfo
 import io.ktor.client.request.forms.*
 import io.ktor.utils.io.jvm.javaio.*
 import kotlinx.datetime.Clock
-import java.io.File
-import java.io.FileInputStream
 
 class AiHoshinoExtension : Extension() {
     override val name = "aihoshino"
@@ -40,13 +38,17 @@ class AiHoshinoExtension : Extension() {
                         }
                         timestamp = Clock.System.now()
                     }
-                    val url = this::class.java.getResource("/images/oshi-no-ko-anime.gif")
-                    if (url != null) {
-                        val fileInputStream = FileInputStream(File(url.toURI()))
-                        val byteReadChannel = fileInputStream.toByteReadChannel()
-                        val channelProvider = ChannelProvider(size = File(url.toURI()).length()) { byteReadChannel }
+                    val inputStream = this::class.java.getResourceAsStream("/images/oshi-no-ko-anime.gif")
+                    if (inputStream != null) {
+                        val byteReadChannel = inputStream.toByteReadChannel()
+                        val channelProvider = ChannelProvider(size = inputStream.available().toLong()) { byteReadChannel }
                         addFile("oshi-no-ko-anime.gif", channelProvider)
+                    } else {
+                        respond {
+                            content = "Lệnh aihoshino đang gặp vấn đề , hãy chờ fix nhé ^_^"
+                        }
                     }
+
                 }
             }
         }
@@ -70,13 +72,17 @@ class AiHoshinoExtension : Extension() {
                         }
                         timestamp = Clock.System.now()
                     }
-                    val url = this::class.java.getResource("/images/oshi-no-ko-anime.gif")
-                    if (url != null) {
-                        val fileInputStream = FileInputStream(File(url.toURI()))
-                        val byteReadChannel = fileInputStream.toByteReadChannel()
-                        val channelProvider = ChannelProvider(size = File(url.toURI()).length()) { byteReadChannel }
+                    val inputStream = this::class.java.getResourceAsStream("/images/oshi-no-ko-anime.gif")
+                    if (inputStream != null) {
+                        val byteReadChannel = inputStream.toByteReadChannel()
+                        val channelProvider = ChannelProvider(size = inputStream.available().toLong()) { byteReadChannel }
                         addFile("oshi-no-ko-anime.gif", channelProvider)
+                    } else {
+                        message.respond {
+                            content = "Lệnh aihoshino đang gặp vấn đề , hãy chờ fix nhé ^_^"
+                        }
                     }
+
                 }
             }
         }

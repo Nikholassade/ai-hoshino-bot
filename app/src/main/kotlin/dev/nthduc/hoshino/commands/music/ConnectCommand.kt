@@ -3,6 +3,7 @@ import dev.kord.core.event.message.MessageCreateEvent
 import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Link
+@Deprecated("ConnectCommand Replace MusicExtension")
 class ConnectCommand(private val lavalink: LavaKord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
