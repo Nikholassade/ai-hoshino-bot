@@ -116,8 +116,8 @@ class PlayCommand(private val lavalink: LavaKord,private val kord: Kord) : Comma
         }
     }
        private suspend fun playNextTrack(link: Link, event: MessageCreateEvent) {
-          val trackPlayer = TrackPlayer(link)
-          trackPlayer.playNextTrack(queue,event,true)
+          val trackPlayer = TrackPlayer(link,queue)
+          trackPlayer.playNextTrack(event,true)
           val buttonHandler = ButtonHandler(link,trackPlayer,event,this)
           if (trackPlayer.nextTrack != null) {
               val embed = TrackEmbed(trackPlayer.nextTrack, event).build()

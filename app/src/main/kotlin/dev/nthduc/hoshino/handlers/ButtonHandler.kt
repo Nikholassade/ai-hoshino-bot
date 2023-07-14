@@ -73,7 +73,7 @@ class ButtonHandler(private val link: Link,
 
             "skipBtn" -> {
                 interaction.kord.launch {
-                    trackPlayer.playNextTrack(queue,event,false)
+                    trackPlayer.playNextTrack(event,false)
                     playCommand.trackEndEventCalled = false;
 
                     if(link.state == Link.State.CONNECTED) {

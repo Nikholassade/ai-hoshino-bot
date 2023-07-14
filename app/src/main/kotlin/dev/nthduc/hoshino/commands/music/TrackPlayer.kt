@@ -7,9 +7,9 @@ import dev.nthduc.hoshino.embeds.TrackEmbed
 import dev.schlaubi.lavakord.audio.Link
 import dev.schlaubi.lavakord.rest.models.PartialTrack
 
-class TrackPlayer(private val link: Link) {
+class TrackPlayer(private val link: Link, queue: MutableList<PartialTrack>) {
     val nextTrack = queue.removeFirstOrNull()
-    suspend fun playNextTrack(queue: MutableList<PartialTrack>, event: MessageCreateEvent,sendEmbed: Boolean = true) {
+    suspend fun playNextTrack(event: MessageCreateEvent,sendEmbed: Boolean = true) {
         if (nextTrack != null) {
             try {
                 link.player.playTrack(nextTrack)
