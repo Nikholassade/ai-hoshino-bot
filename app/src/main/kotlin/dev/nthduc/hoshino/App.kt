@@ -10,11 +10,10 @@ import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import dev.nthduc.hoshino.commands.HelloCommand
 import dev.nthduc.hoshino.commands.HelpCommand
-import dev.nthduc.hoshino.commands.music.*
 import dev.nthduc.hoshino.config.*
 import dev.nthduc.hoshino.extensions.*
 import dev.nthduc.hoshino.extensions.anime.*
-import dev.nthduc.hoshino.extensions.music.PlayExtension
+import dev.nthduc.hoshino.extensions.music.MusicExtension
 import dev.nthduc.hoshino.handlers.CommandHandler
 import dev.nthduc.hoshino.handlers.SlashCommandHandler
 import dev.nthduc.hoshino.plugins.configureRouting
@@ -51,16 +50,6 @@ suspend fun main() {
         val commandHandler = CommandHandler()
         commandHandler.registerCommand("hello", HelloCommand())
         commandHandler.registerCommand("help", HelpCommand(commandHandler.commands))
-        commandHandler.registerCommand("play", PlayCommand(lavalink,client))
-
-        commandHandler.registerCommand("stop", StopCommand(lavalink))
-        commandHandler.registerCommand("pause", PauseCommand(lavalink))
-        commandHandler.registerCommand("resume", ResumeCommand(lavalink))
-        commandHandler.registerCommand("leave", LeaveCommand(lavalink))
-        commandHandler.registerCommand("connect", ConnectCommand(lavalink))
-        commandHandler.registerCommand("skip", SkipCommand(lavalink))
-        commandHandler.registerCommand("nowplaying", NowPlayingCommand(lavalink))
-        commandHandler.registerCommand("lyrics", LyricsCommand(lavalink))
 
         // Create an instance of the SlashCommandHandler
         val slashCommandHandler = SlashCommandHandler(client, applicationId)
@@ -70,7 +59,6 @@ suspend fun main() {
         slashCommandHandler.registerCommand("hello", "Hello slash command", helloCommand::execute)
         slashCommandHandler.registerCommand("help", "Help", helpCommand::execute)
         slashCommandHandler.listen()
-        val playExtension = PlayExtension(lavalink,client)
 
         client.on<MessageCreateEvent> {
             logger.debug("Received message: ${message.content}")
@@ -100,7 +88,7 @@ suspend fun main() {
                 add(::TickleExtension)
                 add(::SearchAnimeExtension)
                 add(::SearchAnimeSauceNaoExtension)
-                add{ playExtension }
+                add(::MusicExtension)
             }
             presence {
                 watching("Oshi no Ko")
