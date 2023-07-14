@@ -5,6 +5,7 @@ import dev.nthduc.hoshino.commands.Command
 import dev.schlaubi.lavakord.LavaKord
 import dev.schlaubi.lavakord.audio.Link
 
+@Deprecated("ResumeCommand Replace MusicExtension")
 class ResumeCommand(private val lavalink: LavaKord) : Command {
     override suspend fun execute(event: MessageCreateEvent) {
         val link = lavalink.getLink(event.guildId?.toString() ?: return)
